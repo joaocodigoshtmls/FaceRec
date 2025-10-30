@@ -778,6 +778,10 @@ app.delete('/api/admin/students/:id', authenticateToken, async (req, res) => {
       conn.release();
     }
   } catch (err) {
+    if (err && err.code === 'ER_NO_SUCH_TABLE') {
+      console.warn('Tabela ausente ao deletar aluno. Sugestão: executar migração do banco.', err);
+      return res.status(404).json({ error: 'Tabelas não inicializadas. Execute a migração do banco.' });
+    }
     console.error('Erro ao deletar aluno:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
@@ -840,6 +844,10 @@ app.delete('/api/admin/classrooms/:id', authenticateToken, async (req, res) => {
       conn.release();
     }
   } catch (err) {
+    if (err && err.code === 'ER_NO_SUCH_TABLE') {
+      console.warn('Tabela ausente ao deletar sala. Sugestão: executar migração do banco.', err);
+      return res.status(404).json({ error: 'Tabelas não inicializadas. Execute a migração do banco.' });
+    }
     console.error('Erro ao deletar sala:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
@@ -911,6 +919,10 @@ app.post('/api/admin/classrooms/:id/remove', authenticateToken, async (req, res)
       conn.release();
     }
   } catch (err) {
+    if (err && err.code === 'ER_NO_SUCH_TABLE') {
+      console.warn('Tabela ausente ao remover sala (com opção). Sugestão: executar migração do banco.', err);
+      return res.status(404).json({ error: 'Tabelas não inicializadas. Execute a migração do banco.' });
+    }
     console.error('Erro ao remover sala (com opção):', err);
     res.status(500).json({ error: err.message || 'Erro interno' });
   }
@@ -920,6 +932,16 @@ app.post('/api/admin/classrooms/:id/remove', authenticateToken, async (req, res)
 app.get('/api/user/profile', authenticateToken, async (req, res) => {
   try {
     console.log('Buscando perfil para usuário ID:', req.user.sub);
+
+    // Fallback: quando logado como admin "predefinido" (sem registro no DB), retorne um perfil básico
+    const rawSub = req.user?.sub;
+    const isNumericId = /^\d+$/.test(String(rawSub || ''));
+    if (!isNumericId) {
+      console.warn('⚠️ Perfil solicitado para ID não numérico; retornando perfil predefinido (sem DB).', { sub: rawSub });
+      const adminUser = buildPredefinedAdminUser();
+      return res.json(adminUser);
+    }
+
     const user = await getUserWithClasses(req.user.sub);
 
     if (!user) {
@@ -1282,9 +1304,14 @@ app.post('/api/admin/import', authenticateToken, async (req, res) => {
 
     const ownerRaw = req.user?.sub ?? req.user?.id ?? null;
     const ownerKeys = buildOwnerKeyCandidates(ownerRaw);
-    const primaryOwnerKey = ownerKeys[0] ?? null;
-    if (!primaryOwnerKey) {
-      return res.status(400).json({ error: 'Identificador de proprietário ausente' });
+    let primaryOwnerKey = ownerKeys[0] ?? null;
+    
+    // Se o owner é um ID não-numérico (ex: 'predefined-admin'), não vincular ao users
+    // Isso permite importações sem exigir registro em users
+    const isNumericOwner = primaryOwnerKey && /^\d+$/.test(String(primaryOwnerKey));
+    if (!isNumericOwner) {
+      console.warn('⚠️ Owner ID não é numérico; usando NULL para owner_user_id (sem FK)');
+      primaryOwnerKey = null;
     }
 
     const conn = await pool.getConnection();
@@ -1412,7 +1439,11 @@ app.post('/api/admin/import', authenticateToken, async (req, res) => {
         try { await conn.rollback(); } catch (e) {}
       }
       console.error('Erro na importação CSV:', err);
-      res.status(500).json({ error: 'Falha ao importar dados: ' + err.message });
+      const code = err && err.code ? String(err.code) : undefined;
+      const hint = (code === 'ER_DBACCESS_DENIED_ERROR' || code === 'ER_TABLE_EXISTS_ERROR')
+        ? 'Verifique as permissões do usuário no MySQL (CREATE/ALTER/DROP) e se o schema já existe.'
+        : undefined;
+      res.status(500).json({ error: 'Falha ao importar dados: ' + err.message, code, hint });
     } finally {
       if (conn) conn.release();
     }

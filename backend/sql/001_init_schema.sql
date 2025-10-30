@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS attendance_logs;
 DROP TABLE IF EXISTS attendance_presence;
 DROP TABLE IF EXISTS lessons;
 DROP TABLE IF EXISTS enrollments;
+DROP TABLE IF EXISTS students;
 DROP TABLE IF EXISTS classrooms;
 DROP TABLE IF EXISTS users;
 
@@ -52,9 +53,8 @@ CREATE TABLE classrooms (
   total_students INT DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_classrooms_owner (owner_user_id),
-  UNIQUE KEY uq_classroom_owner_name (owner_user_id, name)
-);
+  KEY idx_classrooms_owner (owner_user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE students (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -69,8 +69,9 @@ CREATE TABLE students (
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_students_owner (owner_user_id),
+  KEY idx_students_classroom (classroom_id),
   CONSTRAINT fk_students_classroom FOREIGN KEY (classroom_id) REFERENCES classrooms(id) ON DELETE SET NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE attendance_logs (
   id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
