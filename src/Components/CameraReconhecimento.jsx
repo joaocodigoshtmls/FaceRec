@@ -373,13 +373,7 @@ const CameraReconhecimento = ({
       className={`bg-white rounded-xl border border-gray-200 overflow-hidden ${className}`}
     >
       {/* Header do Componente */}
-      <div
-        className={`p-4 text-white ${
-          isCapturing
-            ? "bg-gradient-to-r from-red-600 to-orange-600"
-            : "bg-gradient-to-r from-blue-600 to-green-600"
-        }`}
-      >
+      <div className="p-4 text-white bg-gradient-to-r from-blue-600 to-green-600">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Camera className="w-6 h-6" />
@@ -395,14 +389,8 @@ const CameraReconhecimento = ({
             </div>
           </div>
 
-          {/* Status LED e Aviso */}
+          {/* Status LED */}
           <div className="flex items-center space-x-4">
-            {isCapturing && (
-              <div className="text-right">
-                <p className="text-xs font-bold">🚨 GRAVANDO</p>
-                <p className="text-xs opacity-75">Clique FECHAR para parar</p>
-              </div>
-            )}
             <div className="flex items-center space-x-2">
               <div
                 className={`w-4 h-4 rounded-full ${
@@ -549,9 +537,10 @@ const CameraReconhecimento = ({
               disabled={cameraError && !hasCamera}
               className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all ${
                 isCapturing
-                  ? "bg-red-600 hover:bg-red-700 text-white"
+                  ? "bg-red-600 hover:bg-red-700 text-white border-2 border-red-500"
                   : "bg-green-600 hover:bg-green-700 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
               }`}
+              title={isCapturing ? "Fechar câmera imediatamente" : "Solicitar acesso à câmera"}
             >
               {isCapturing ? (
                 <Square className="w-5 h-5" />
@@ -559,21 +548,9 @@ const CameraReconhecimento = ({
                 <Play className="w-5 h-5" />
               )}
               <span>
-                {isCapturing ? "🔒 FECHAR CÂMERA" : "🎥 Solicitar Câmera"}
+                {isCapturing ? "� FECHAR CÂMERA" : "🎥 Solicitar Câmera"}
               </span>
             </button>
-
-            {/* Botão de emergência para fechar câmera */}
-            {isCapturing && (
-              <button
-                onClick={pararCamera}
-                className="flex items-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-semibold transition-all border-2 border-red-500"
-                title="Fechar câmera imediatamente"
-              >
-                <Square className="w-5 h-5" />
-                <span>🚨 EMERGÊNCIA</span>
-              </button>
-            )}
           </div>
 
           {/* Informações de status */}
