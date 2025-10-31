@@ -196,6 +196,8 @@ const Alunos = () => {
     fecharChamadaManual();
   };
 
+
+
   /**
    * Componente de Card da Sala
    * Renderiza as informações de uma sala em formato de card

@@ -231,6 +231,56 @@ const Sala = () => {
   };
 
   /**
+   * Função para salvar a chamada do reconhecimento facial
+   */
+  const salvarChamadaReconhecimento = () => {
+    const totalPresentes = Object.keys(presencas).length;
+    const totalAusentes = alunos.length - totalPresentes;
+
+    if (totalPresentes === 0) {
+      alert('Nenhum aluno foi detectado pela câmera ainda.\n\nInicie o reconhecimento facial e aguarde alguns alunos serem identificados antes de salvar.');
+      return;
+    }
+
+    const confirmar = window.confirm(
+      `Salvar chamada da sala "${salaInfo.nome}"?\n\n` +
+      `✅ Presentes: ${totalPresentes}\n` +
+      `❌ Ausentes: ${totalAusentes}\n` +
+      `📊 Taxa de presença: ${Math.round((totalPresentes/alunos.length)*100)}%\n\n` +
+      `Tipo: Reconhecimento Facial`
+    );
+
+    if (!confirmar) return;
+
+    // Criar registro da chamada com dados do reconhecimento
+    const registroChamada = {
+      sala: salaInfo.nome,
+      salaId: salaInfo.id || id,
+      data: new Date().toISOString(),
+      tipo: 'reconhecimento_facial',
+      presencas: totalPresentes,
+      ausencias: totalAusentes,
+      alunos: alunos.map(aluno => ({
+        nome: aluno.nome,
+        matricula: aluno.matricula,
+        presente: !!presencas[aluno.id],
+        horarioDeteccao: presencas[aluno.id] || null
+      }))
+    };
+
+    // Salvar no localStorage
+    const chamadasExistentes = JSON.parse(localStorage.getItem('chamadas_realizadas') || '[]');
+    chamadasExistentes.push(registroChamada);
+    localStorage.setItem('chamadas_realizadas', JSON.stringify(chamadasExistentes));
+
+    alert(`✅ Chamada salva com sucesso!\n\n` +
+          `📚 Sala: ${salaInfo.nome}\n` +
+          `👥 Presentes: ${totalPresentes}/${alunos.length}\n` +
+          `⏰ Data: ${new Date().toLocaleString('pt-BR')}\n` +
+          `🤖 Método: Reconhecimento Facial`);
+  };
+
+  /**
    * Componente do Card do Aluno
    */
   const CardAluno = ({ aluno }) => {
@@ -420,7 +470,7 @@ const Sala = () => {
         {totalPresentes > 0 && (
           <div className="mt-8 bg-green-50 border border-green-200 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-green-800 mb-4">Resumo da Chamada</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center mb-6">
               <div>
                 <div className="text-2xl font-bold text-green-600">{totalPresentes}</div>
                 <div className="text-sm text-green-700">Presentes</div>
@@ -433,6 +483,20 @@ const Sala = () => {
                 <div className="text-2xl font-bold text-blue-600">{porcentagemPresenca}%</div>
                 <div className="text-sm text-blue-700">Taxa de Presença</div>
               </div>
+            </div>
+            
+            {/* Botão Salvar Chamada */}
+            <div className="text-center">
+              <button
+                onClick={salvarChamadaReconhecimento}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 mx-auto"
+              >
+                <CheckCircle className="w-5 h-5" />
+                <span>Salvar Chamada</span>
+              </button>
+              <p className="text-sm text-green-600 mt-2">
+                Salva a chamada com os alunos detectados pelo reconhecimento facial
+              </p>
             </div>
           </div>
         )}
