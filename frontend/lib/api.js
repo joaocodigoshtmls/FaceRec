@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-// Configurar baseURL: em produção usa "/api" (reescrito pelo Vercel), em dev usa localhost
-const baseURL = import.meta.env.PROD 
-  ? '/api' 
-  : import.meta.env.VITE_API_BASE || 'http://localhost:3001/api';
+// Configurar baseURL:
+// - Se VITE_API_BASE estiver definida, usa ela (tanto em dev quanto em prod).
+// - Caso contrário: em prod usa "/api" (esperando rewrite/proxy no host), em dev usa localhost:3001.
+const baseURL =
+  import.meta.env.VITE_API_BASE ||
+  (import.meta.env.PROD ? '/api' : 'http://localhost:3001/api');
 
 const api = axios.create({
   baseURL,
