@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm install && npm run build:all",
+  "buildCommand": "npm install && npm run vercel-build",
   "outputDirectory": "frontend/dist",
   "env": {
     "NODE_ENV": "production"
