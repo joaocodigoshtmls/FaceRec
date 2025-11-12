@@ -88,6 +88,20 @@ const pool = dbConf
 const normalize = (v) => String(v || '').trim();
 const normalizeEmail = (v) => normalize(v).toLowerCase();
 
+function friendlyDbError(err) {
+  const code = err?.code || err?.name || 'UNKNOWN';
+  const map = {
+    ER_ACCESS_DENIED_ERROR: 'Acesso ao banco negado: verifique usuário e senha.',
+    ER_BAD_DB_ERROR: 'Banco de dados não existe: verifique DB_NAME/DATABASE_URL.',
+    ER_NO_SUCH_TABLE: "Tabela requerida não existe (ex.: 'users'): aplique as migrações.",
+    ENOTFOUND: 'Host do banco não encontrado: verifique DB_HOST.',
+    ECONNREFUSED: 'Conexão recusada: verifique porta/Firewall/Permissões.',
+    PROTOCOL_CONNECTION_LOST: 'Conexão com o banco perdida.',
+    ER_HOST_NOT_PRIVILEGED: 'Host sem permissão no MySQL: libere o acesso para o servidor do Vercel.',
+  };
+  return { code, message: map[code] || 'Erro de banco de dados' };
+}
+
 /* ===== Rotas Auth mínimas (sem Prisma) ===== */
 app.post('/api/auth/register', async (req, res) => {
   try {
@@ -142,8 +156,13 @@ app.post('/api/auth/register', async (req, res) => {
       sqlState: err?.sqlState,
       message: err?.message,
     };
+    const friendly = friendlyDbError(err);
     const expose = (process.env.VERCEL_ENV === 'preview' || process.env.DEBUG_API === '1');
-    return res.status(500).json(expose ? { error: 'server-error', detail } : { error: 'A server error has occurred' });
+    return res.status(500).json(
+      expose
+        ? { error: 'server-error', detail, hint: friendly }
+        : { error: friendly.message, code: friendly.code }
+    );
   }
 });
 
@@ -193,8 +212,13 @@ app.post('/api/auth/login', async (req, res) => {
       sqlState: err?.sqlState,
       message: err?.message,
     };
+    const friendly = friendlyDbError(err);
     const expose = (process.env.VERCEL_ENV === 'preview' || process.env.DEBUG_API === '1');
-    return res.status(500).json(expose ? { error: 'server-error', detail } : { error: 'A server error has occurred' });
+    return res.status(500).json(
+      expose
+        ? { error: 'server-error', detail, hint: friendly }
+        : { error: friendly.message, code: friendly.code }
+    );
   }
 });
 
@@ -218,7 +242,17 @@ app.get('/api/db-check', async (req, res) => {
     const conn = await pool.getConnection();
     try {
       const [rows] = await conn.query('SELECT 1 AS ok');
-      return res.json({ ok: true, db: rows?.[0]?.ok === 1 ? 'up' : 'unknown' });
+      const out = { ok: true, db: rows?.[0]?.ok === 1 ? 'up' : 'unknown' };
+      if (String(req.query.deep || '') === '1') {
+        const [t] = await conn.query("SHOW TABLES LIKE 'users'");
+        const hasUsers = Array.isArray(t) && t.length > 0;
+        out.hasUsersTable = hasUsers;
+        if (hasUsers) {
+          const [[countRow]] = await conn.query('SELECT COUNT(1) AS c FROM users');
+          out.usersCount = Number(countRow?.c || 0);
+        }
+      }
+      return res.json(out);
     } finally {
       conn.release();
     }
