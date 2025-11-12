@@ -1,11 +1,13 @@
 import axios from 'axios';
 
-const rawBase = import.meta.env.VITE_API_BASE || '/api';
-const normalizedBase = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+// Configurar baseURL: em produção usa "/api" (reescrito pelo Vercel), em dev usa localhost
+const baseURL = import.meta.env.PROD 
+  ? '/api' 
+  : import.meta.env.VITE_API_BASE || 'http://localhost:3001/api';
 
 const api = axios.create({
-  baseURL: normalizedBase,
-  withCredentials: true,
+  baseURL,
+  withCredentials: true, // Enviar credenciais (cookies, headers de auth)
 });
 
 // 🔒 Interceptor para adicionar token JWT em todas as requisições
@@ -28,12 +30,12 @@ api.interceptors.request.use(
   }
 );
 
-export const apiBaseURL = normalizedBase;
+export const apiBaseURL = baseURL;
 
 export const apiOrigin = (() => {
   if (typeof window === 'undefined') return '';
   try {
-    const url = new URL(normalizedBase, window.location.origin);
+    const url = new URL(baseURL, window.location.origin);
     url.pathname = url.pathname.replace(/\/api$/, '');
     const cleanedPath = url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname;
     return `${url.origin}${cleanedPath}`;
