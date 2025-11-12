@@ -53,12 +53,12 @@ export default function Login() {
       // Envia dados mínimos para o backend associar/registrar
       const payload = {
         firebaseUid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
+        firebaseEmail: user.email,
+        firebaseDisplayName: user.displayName,
+        firebasePhotoURL: user.photoURL,
         idToken, // opcional para futura validação no backend
       };
-      const { data } = await api.post('/auth/firebase-login', payload);
+      const { data } = await api.post('/sync-firebase-user', payload);
       if (!data?.token || !data?.user) throw new Error('Falha ao autenticar com o servidor');
       localStorage.setItem('token', data.token);
       localStorage.setItem('usuario', JSON.stringify(data.user));
