@@ -19,7 +19,6 @@ const app = express();
 
 /* ===== CORS Whitelist ===== */
 const allowlist = [
-  'https://facerec-f9sojq30p-joaocodigoshtmls-projects.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
   'http://127.0.0.1:5173',
@@ -28,9 +27,9 @@ const allowlist = [
 
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowlist.includes(origin)) {
-      return callback(null, true);
-    }
+    if (!origin) return callback(null, true);
+    if (allowlist.includes(origin)) return callback(null, true);
+    if (/^https?:\/\/[-a-z0-9]+\.vercel\.app$/i.test(origin)) return callback(null, true);
     return callback(new Error(`Origin ${origin} not allowed by CORS`));
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -51,26 +50,36 @@ app.options('*', cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 
 /* ===== DB Pool ===== */
-function getDatabaseUrl() {
-  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
+function getDbConfig() {
+  if (process.env.DATABASE_URL) return { url: process.env.DATABASE_URL };
   const host = process.env.DB_HOST;
   const user = process.env.DB_USER;
   const password = process.env.DB_PASSWORD;
-  const name = process.env.DB_NAME;
-  const port = process.env.DB_PORT || '3306';
-  if (host && user && password && name) {
-    return `mysql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}:${port}/${name}`;
+  const database = process.env.DB_NAME;
+  const port = Number(process.env.DB_PORT || 3306);
+  if (host && user && password && database) {
+    return { host, user, password, database, port };
   }
   return null;
 }
 
-const DB_URL = getDatabaseUrl();
-if (!DB_URL) {
+const dbConf = getDbConfig();
+if (!dbConf) {
   console.warn('⚠️ Variáveis de banco não configuradas. Defina DATABASE_URL ou DB_HOST/DB_USER/DB_PASSWORD/DB_NAME.');
 }
 
-const pool = DB_URL
-  ? mysql.createPool(DB_URL + '?connectionLimit=4&waitForConnections=true')
+const pool = dbConf
+  ? (dbConf.url
+      ? mysql.createPool({ uri: dbConf.url, waitForConnections: true, connectionLimit: 4 })
+      : mysql.createPool({
+          host: dbConf.host,
+          user: dbConf.user,
+          password: dbConf.password,
+          database: dbConf.database,
+          port: dbConf.port,
+          waitForConnections: true,
+          connectionLimit: 4,
+        }))
   : null;
 
 /* ===== Helpers ===== */
@@ -125,7 +134,14 @@ app.post('/api/auth/register', async (req, res) => {
     }
   } catch (err) {
     console.error('Erro em /api/auth/register:', err);
-    return res.status(500).json({ error: 'A server error has occurred' });
+    const detail = {
+      code: err?.code,
+      errno: err?.errno,
+      sqlState: err?.sqlState,
+      message: err?.message,
+    };
+    const expose = (process.env.VERCEL_ENV === 'preview' || process.env.DEBUG_API === '1');
+    return res.status(500).json(expose ? { error: 'server-error', detail } : { error: 'A server error has occurred' });
   }
 });
 
@@ -169,7 +185,14 @@ app.post('/api/auth/login', async (req, res) => {
     }
   } catch (err) {
     console.error('Erro em /api/auth/login:', err);
-    return res.status(500).json({ error: 'A server error has occurred' });
+    const detail = {
+      code: err?.code,
+      errno: err?.errno,
+      sqlState: err?.sqlState,
+      message: err?.message,
+    };
+    const expose = (process.env.VERCEL_ENV === 'preview' || process.env.DEBUG_API === '1');
+    return res.status(500).json(expose ? { error: 'server-error', detail } : { error: 'A server error has occurred' });
   }
 });
 
@@ -178,7 +201,28 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true, timestamp: new Date() });
+  res.json({ ok: true, timestamp: new Date(), env: process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown' });
+});
+
+app.get('/api/db-check', async (req, res) => {
+  try {
+    if (!pool) return res.status(500).json({ ok: false, error: 'DB not configured' });
+    const conn = await pool.getConnection();
+    try {
+      const [rows] = await conn.query('SELECT 1 AS ok');
+      return res.json({ ok: true, db: rows?.[0]?.ok === 1 ? 'up' : 'unknown' });
+    } finally {
+      conn.release();
+    }
+  } catch (err) {
+    const detail = {
+      code: err?.code,
+      errno: err?.errno,
+      sqlState: err?.sqlState,
+      message: err?.message,
+    };
+    return res.status(500).json({ ok: false, error: 'DB check failed', detail });
+  }
 });
 
 // Fallback 404
