@@ -253,9 +253,14 @@ function buildPredefinedAdminUser() {
   };
 }
 
-/* ===== CORS (habilita front em Vite) ===== */
+/* ===== CORS (habilita front em Vite e produção) ===== */
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5174', 'http://127.0.0.1:5174'],
+  origin: (origin, callback) => {
+    // Permite qualquer origem em produção (recomendado: restringir a domínios específicos)
+    // Para máxima segurança, liste domínios específicos:
+    // const allowedOrigins = ['http://localhost:5173', 'https://seu-dominio-vercel.app'];
+    callback(null, true);
+  },
   credentials: true,
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization']
