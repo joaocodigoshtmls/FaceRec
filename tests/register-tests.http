@@ -1,0 +1,237 @@
+### Tests para /api/auth/register
+### Use extensão "REST Client" no VS Code
+### Criar arquivo .http e executar requests clicando em "Send Request"
+
+### ============================================
+### CONFIGURAÇÕES
+### ============================================
+
+@baseUrl = http://localhost:3001
+@prodUrl = https://facerec.vercel.app
+@origin = http://localhost:5173
+@prodOrigin = https://facerec.vercel.app
+@contentType = application/json; charset=utf-8
+
+### ============================================
+### 1. PREFLIGHT OPTIONS - LOCAL
+### ============================================
+
+### Preflight local (deve retornar 204)
+OPTIONS {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: Content-Type, Authorization
+
+### ============================================
+### 2. PREFLIGHT OPTIONS - PRODUÇÃO
+### ============================================
+
+### Preflight produção (deve retornar 204)
+OPTIONS {{prodUrl}}/api/auth/register
+Origin: {{prodOrigin}}
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: Content-Type, Authorization
+
+### ============================================
+### 3. CADASTRO SUCESSO - LOCAL
+### ============================================
+
+### Cadastro com dados válidos (deve retornar 201)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "João Silva Teste",
+  "email": "joao{{$timestamp}}@example.com",
+  "password": "SenhaSegura123!",
+  "subject": "Matemática",
+  "school": "Escola Municipal"
+}
+
+### ============================================
+### 4. CADASTRO SUCESSO - PRODUÇÃO
+### ============================================
+
+### Cadastro em produção (deve retornar 201)
+POST {{prodUrl}}/api/auth/register
+Origin: {{prodOrigin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "Teste Produção",
+  "email": "prod{{$timestamp}}@example.com",
+  "password": "ProdPass123!",
+  "subject": "Inglês",
+  "school": "Escola Técnica"
+}
+
+### ============================================
+### 5. VALIDAÇÃO - NOME CURTO
+### ============================================
+
+### Nome com menos de 2 caracteres (422)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "J",
+  "email": "test@example.com",
+  "password": "SenhaSegura123!"
+}
+
+### ============================================
+### 6. VALIDAÇÃO - EMAIL INVÁLIDO
+### ============================================
+
+### Email sem @ (422)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "João Silva",
+  "email": "nao-e-email",
+  "password": "SenhaSegura123!"
+}
+
+### ============================================
+### 7. VALIDAÇÃO - SENHA CURTA
+### ============================================
+
+### Senha com menos de 8 caracteres (422)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "João Silva",
+  "email": "joao@example.com",
+  "password": "12345"
+}
+
+### ============================================
+### 8. VALIDAÇÃO - MÚLTIPLOS ERROS
+### ============================================
+
+### Múltiplos campos inválidos (422)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "",
+  "email": "invalido",
+  "password": "abc"
+}
+
+### ============================================
+### 9. CONFLITO - EMAIL DUPLICADO
+### ============================================
+
+### Cadastrar usuário (guarde o email)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "Primeiro Usuario",
+  "email": "duplicado@example.com",
+  "password": "SenhaSegura123!"
+}
+
+### Tentar cadastrar com mesmo email (409)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "Segundo Usuario",
+  "email": "duplicado@example.com",
+  "password": "OutraSenha123!"
+}
+
+### ============================================
+### 10. CORS - ORIGEM NÃO PERMITIDA
+### ============================================
+
+### Requisição com origin não whitelisted (CORS error)
+POST {{baseUrl}}/api/auth/register
+Origin: https://evil.com
+Content-Type: {{contentType}}
+
+{
+  "fullName": "Teste",
+  "email": "test@example.com",
+  "password": "SenhaSegura123!"
+}
+
+### ============================================
+### 11. BODY VAZIO
+### ============================================
+
+### POST sem body (400 ou 422)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+### ============================================
+### 12. TESTES ESPECIAIS
+### ============================================
+
+### Nome com espaços extras
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "   João   Silva   ",
+  "email": "joao@example.com",
+  "password": "SenhaSegura123!"
+}
+
+### Email em MAIÚSCULAS (deve normalizar para minúsculas)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "João Silva",
+  "email": "JOAO@EXAMPLE.COM",
+  "password": "SenhaSegura123!"
+}
+
+### Email com espaços (será trimado)
+POST {{baseUrl}}/api/auth/register
+Origin: {{origin}}
+Content-Type: {{contentType}}
+
+{
+  "fullName": "João Silva",
+  "email": "  joao@example.com  ",
+  "password": "SenhaSegura123!"
+}
+
+### ============================================
+### NOTAS
+### ============================================
+
+### Como usar:
+### 1. Instalar extensão "REST Client" (REST Client by Huachao Mao)
+### 2. Abrir este arquivo (.http)
+### 3. Clicar em "Send Request" acima de cada requisição
+### 4. Ver resposta no painel à direita
+
+### Códigos esperados:
+### 204 No Content - Preflight OPTIONS OK
+### 201 Created - Cadastro bem-sucedido
+### 400 Bad Request - Dados malformados
+### 409 Conflict - Email já existe
+### 422 Unprocessable Entity - Validação falhou
+### 500 Internal Server Error - Erro no servidor
+### 405 Method Not Allowed - ⚠️ AINDA TEM O BUG!
+
+### Para trocar entre local e produção:
+### - Usar @baseUrl para localhost
+### - Usar @prodUrl para Vercel

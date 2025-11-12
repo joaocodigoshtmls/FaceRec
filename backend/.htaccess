@@ -1,0 +1,36 @@
+# FaceRec Backend - Redirecionar todas as requisições para Node.js (app.js)
+# Este arquivo garante que o AlwaysData encaminhe todas as rotas ao Node.js
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Não reescrever se for arquivo real
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # Não reescrever se for diretório real
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Redirecionar tudo para app.js (Node.js)
+  RewriteRule ^(.*)$ app.js [QSA,L]
+</IfModule>
+
+# CORS Headers (se o proxy não passar automaticamente)
+<IfModule mod_headers.c>
+  SetEnvIf Origin "https://facerec-f9sojq30p-joaocodigoshtmls-projects\.vercel\.app$" ORIGIN_OK=$0
+  SetEnvIf Origin "http://localhost:5173$" ORIGIN_OK=$0
+  SetEnvIf Origin "http://localhost:3000$" ORIGIN_OK=$0
+
+  Header always set Access-Control-Allow-Origin "%{ORIGIN_OK}e" env=ORIGIN_OK
+  Header always set Access-Control-Allow-Credentials "true"
+  Header always set Access-Control-Allow-Methods "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+  Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept"
+  Header always set Vary "Origin"
+</IfModule>
+
+# Responder 204 ao OPTIONS (preflight)
+<IfModule mod_rewrite.c>
+  RewriteCond %{REQUEST_METHOD} ^OPTIONS$
+  RewriteRule ^ - [R=204,L]
+</IfModule>
