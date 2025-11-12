@@ -63,8 +63,13 @@ export const register = async (req, res) => {
       },
     });
 
+    // Gerar token JWT imediatamente após registro
+    const userId = user.id.toString();
+    const token = jwt.sign({ sub: userId, id: userId, role: 'professor' }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
     res.status(201).json({
       message: 'Usuário criado com sucesso!',
+      token,
       user: formatUserResponse({ ...user, teacherClasses: [] }),
     });
   } catch (error) {

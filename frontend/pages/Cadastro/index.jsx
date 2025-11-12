@@ -109,33 +109,9 @@ export default function Cadastro() {
   role: selectedRole === 'supervisor' ? 'supervisor' : 'professor',
       };
 
-      // Tenta endpoints em ordem de preferência, com fallback entre variações conhecidas.
-      const tryEndpoints = [
-        '/signup',          // backend/src/server.js (via proxy /api)
-        '/register',        // variante Prisma controller
-        '/auth/register',   // rota montada em /api/auth
-      ];
-
-      let data;
-      let lastErr;
-      for (const path of tryEndpoints) {
-        try {
-          const res = await api.post(path, payload);
-          data = res.data;
-          lastErr = null;
-          break;
-        } catch (err) {
-          const status = err?.response?.status;
-          if ([404, 405, 501].includes(status)) {
-            lastErr = err;
-            continue; // tenta próximo endpoint
-          }
-          // outros erros (409, 400, 500) param aqui
-          throw err;
-        }
-      }
-
-      if (!data && lastErr) throw lastErr;
+      // Usar a rota consolidada /auth/register (definida em backend/routes/auth.js)
+      const res = await api.post('/auth/register', payload);
+      const data = res.data;
       
       if (data?.error) throw new Error(data.error);
 
