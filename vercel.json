@@ -2,11 +2,6 @@
   "version": 2,
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
-  "env": {
-    "VITE_API_BASE": "@vite_api_base",
-    "VITE_CAM_BASE": "@vite_cam_base",
-    "VITE_SOCKET_BASE": "@vite_socket_base"
-  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
