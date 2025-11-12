@@ -1,4 +1,4 @@
-import { cp, rm, stat } from 'fs/promises';
+import { cp, mkdir, rm, stat } from 'fs/promises';
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -6,6 +6,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, '..');
 const frontendDist = resolve(projectRoot, 'frontend', 'dist');
 const rootDist = resolve(projectRoot, 'dist');
+const vercelStatic = resolve(projectRoot, '.vercel', 'output', 'static');
 
 async function pathExists(target) {
   try {
@@ -36,4 +37,11 @@ async function pathExists(target) {
 
   await cp(frontendDist, rootDist, { recursive: true });
   console.log(`[sync-frontend-dist] Copiado ${frontendDist} -> ${rootDist}`);
+
+  await mkdir(vercelStatic, { recursive: true });
+  // Limpa conteúdo antigo da saída estática do Vercel
+  await rm(vercelStatic, { recursive: true, force: true });
+  await mkdir(vercelStatic, { recursive: true });
+  await cp(frontendDist, vercelStatic, { recursive: true });
+  console.log(`[sync-frontend-dist] Copiado ${frontendDist} -> ${vercelStatic}`);
 })();
