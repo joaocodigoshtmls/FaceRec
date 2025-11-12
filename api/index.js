@@ -68,9 +68,11 @@ if (!dbConf) {
   console.warn('⚠️ Variáveis de banco não configuradas. Defina DATABASE_URL ou DB_HOST/DB_USER/DB_PASSWORD/DB_NAME.');
 }
 
+// Importante: mysql2 aceita connection string diretamente; a opção { uri: ... } não é suportada.
+// Portanto, quando DATABASE_URL estiver presente, use diretamente a string na criação do pool.
 const pool = dbConf
   ? (dbConf.url
-      ? mysql.createPool({ uri: dbConf.url, waitForConnections: true, connectionLimit: 4 })
+      ? mysql.createPool(dbConf.url)
       : mysql.createPool({
           host: dbConf.host,
           user: dbConf.user,
@@ -201,7 +203,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true, timestamp: new Date(), env: process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown' });
+  res.json({
+    ok: true,
+    timestamp: new Date(),
+    env: process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown',
+    dbConfigured: Boolean(dbConf),
+    dbMode: dbConf?.url ? 'url' : (dbConf ? 'params' : 'none'),
+  });
 });
 
 app.get('/api/db-check', async (req, res) => {
