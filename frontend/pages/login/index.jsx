@@ -89,7 +89,7 @@ export default function Login() {
         const before = emailInput.split('@')[0];
         return before || 'Usuário FaceRec';
       })();
-      const { data } = await api.post('/login', { email: emailInput, login: emailInput, password: formData.password });
+      const { data } = await api.post('/auth/login', { email: emailInput, login: emailInput, password: formData.password });
       if (!data?.token || !data?.user?.id) throw new Error(data?.error || 'Erro no login');
       localStorage.setItem('token', data.token);
       const apiUser = data.user;
