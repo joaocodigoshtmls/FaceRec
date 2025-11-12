@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Configurar baseURL:
-// - Se VITE_API_BASE estiver definida, usa ela (tanto em dev quanto em prod).
-// - Caso contrário: em prod usa "/api" (esperando rewrite/proxy no host), em dev usa localhost:3001.
+// - Em PROD no Vercel: usa "/api" (mesmo domínio, reescrito para /api/index.js)
+// - Em DEV: usa VITE_API_BASE ou http://localhost:3001/api
 const baseURL =
   import.meta.env.VITE_API_BASE ||
   (import.meta.env.PROD ? '/api' : 'http://localhost:3001/api');
