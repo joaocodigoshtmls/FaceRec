@@ -6,6 +6,12 @@ import dotenv from 'dotenv';
 import authRoutes from '../backend/routes/auth.js';
 import prisma from '../backend/src/prisma.js';
 
+// Fallback para JWT_SECRET (evita 500 se variável não estiver configurada no Vercel)
+if (!process.env.JWT_SECRET) {
+  console.warn('⚠️ JWT_SECRET não definido no ambiente — usando valor TEMPORÁRIO (apenas para testes).');
+  process.env.JWT_SECRET = 'temp-secret-change-me';
+}
+
 dotenv.config();
 
 const app = express();

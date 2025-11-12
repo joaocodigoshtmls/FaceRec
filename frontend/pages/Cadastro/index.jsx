@@ -129,7 +129,8 @@ export default function Cadastro() {
       }, 1500);
       return;
     } catch (err) {
-      const message = err.response?.data?.error || err.message || "Erro no cadastro";
+      const raw = err?.response?.data?.error ?? err?.message ?? "Erro no cadastro";
+      const message = typeof raw === 'string' ? raw : (raw?.message || JSON.stringify(raw));
       console.error("Erro no cadastro:", message);
       setErrorMessage(message);
       setSuccessMessage("");
