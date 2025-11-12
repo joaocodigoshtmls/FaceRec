@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="410" height="404" viewBox="0 0 410 404">
+  <defs>
+    <linearGradient id="vite-gradient-1" x1="100%" x2="0%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff7a1a" />
+      <stop offset="100%" stop-color="#ff006e" />
+    </linearGradient>
+    <linearGradient id="vite-gradient-2" x1="100%" x2="50%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0ea5e9" />
+    </linearGradient>
+  </defs>
+  <path fill="url(#vite-gradient-1)" d="M399.641 43.27 215.643 390.045c-5.487 10.218-19.802 10.232-25.307.025L9.246 43.37c-5.8-10.64 2.356-23.39 13.83-22.024l186.93 22.26a15 15 0 0 0 3.481-.002l172.081-22.126c11.458-1.474 19.644 11.137 13.924 21.779Z" />
+  <path fill="url(#vite-gradient-2)" d="M292.965.016 145.777 27.501a7 7 0 0 0-5.608 8.06l28.347 162.435c.951 5.451 7.856 7.353 11.292 3.137l30.744-37.44a5 5 0 0 1 8.544 2.918l8.36 56.773c.75 5.087 7.445 6.486 10.316 2.121L306.38 95.607c2.44-3.668-.883-8.335-5.158-7.53l-40.885 7.69a5 5 0 0 1-5.842-6.404l25.247-82.917C282.923 2.169 288.353-.815 292.965.016Z" />
+</svg>

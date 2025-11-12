@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model attendance_logs {
+  id           BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  student_id   BigInt      @db.UnsignedBigInt
+  classroom_id BigInt?     @db.UnsignedBigInt
+  captured_at  DateTime    @default(now())
+  confidence   Float?      @db.Float
+  device_label String?     @db.VarChar(100)
+  metadata     String?     @db.LongText
+  classrooms   classrooms? @relation(fields: [classroom_id], references: [id])
+  students     students    @relation(fields: [student_id], references: [id], onDelete: Cascade)
+
+  @@index([captured_at], map: "idx_attendance_captured")
+  @@index([classroom_id], map: "idx_attendance_classroom")
+  @@index([student_id, captured_at], map: "idx_attendance_student_time")
+}
+
+model classrooms {
+  id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  owner_user_id   BigInt?           @db.UnsignedBigInt
+  name            String            @db.VarChar(120)
+  turma           String?           @db.VarChar(120)
+  periodo         String?           @db.VarChar(60)
+  total_students  Int               @default(0)
+  created_at      DateTime          @default(now())
+  attendance_logs attendance_logs[]
+  users           users?            @relation(fields: [owner_user_id], references: [id])
+  enrollments     enrollments[]
+  students        students[]
+
+  @@index([owner_user_id], map: "idx_classrooms_owner")
+}
+
+model enrollments {
+  id           BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  student_id   BigInt             @db.UnsignedBigInt
+  classroom_id BigInt             @db.UnsignedBigInt
+  enrolled_at  DateTime           @default(now())
+  status       enrollments_status @default(active)
+  classrooms   classrooms         @relation(fields: [classroom_id], references: [id], onDelete: Cascade)
+  students     students           @relation(fields: [student_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, classroom_id], map: "uq_enrollment")
+  @@index([classroom_id], map: "idx_enrollment_classroom")
+  @@index([student_id], map: "idx_enrollment_student")
+}
+
+model students {
+  id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  nome            String            @db.VarChar(150)
+  matricula       String?           @db.VarChar(100)
+  email           String?           @db.VarChar(150)
+  telefone        String?           @db.VarChar(30)
+  classroom_id    BigInt?           @db.UnsignedBigInt
+  owner_user_id   BigInt?           @db.UnsignedBigInt
+  foto            String?           @db.VarChar(500)
+  ativo           Boolean           @default(true)
+  created_at      DateTime          @default(now())
+  attendance_logs attendance_logs[]
+  enrollments     enrollments[]
+  classrooms      classrooms?       @relation(fields: [classroom_id], references: [id])
+  users           users?            @relation(fields: [owner_user_id], references: [id])
+
+  @@index([ativo, foto], map: "idx_students_active_foto")
+  @@index([classroom_id], map: "idx_students_classroom")
+  @@index([matricula], map: "idx_students_matricula")
+  @@index([owner_user_id], map: "idx_students_owner")
+}
+
+model teacher_classes {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id    BigInt   @db.UnsignedBigInt
+  class_name String   @db.VarChar(120)
+  created_at DateTime @default(now())
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, class_name], map: "uq_teacher_class")
+  @@index([user_id], map: "idx_teacher_classes_user")
+}
+
+model users {
+  id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  full_name       String            @db.VarChar(150)
+  email           String            @unique @db.VarChar(150)
+  password_hash   String            @db.VarChar(255)
+  role            users_role        @default(professor)
+  subject         String?           @db.VarChar(120)
+  school          String?           @db.VarChar(150)
+  phone           String?           @db.VarChar(30)
+  cpf             String?           @db.VarChar(20)
+  firebase_uid    String?           @unique
+  profile_picture String?           @db.VarChar(500)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime
+  classrooms      classrooms[]
+  students        students[]
+  teacher_classes teacher_classes[]
+}
+
+enum users_role {
+  supervisor
+  professor
+}
+
+enum enrollments_status {
+  active
+  inactive
+  transferred
+}
