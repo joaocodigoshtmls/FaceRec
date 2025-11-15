@@ -31,6 +31,7 @@ html, body, #root { height: 100%; }
 body{
   margin: 0;
   /* Gradiente em camadas para amenizar o contraste preto/azul no fundo */
+  background-color: #01040a;
   background:
     radial-gradient(circle at 20% 20%, rgba(30, 64, 175, 0.24), transparent 58%),
     radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.16), transparent 62%),
@@ -47,6 +48,24 @@ body{
   font-size: 16px;
   font-weight: 400;
   min-height: 100%;
+  background-attachment: fixed;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255, 122, 26, 0.12), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(255, 122, 26, 0.08), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(255, 122, 26, 0.06), transparent 50%);
+}
+
+#root {
+  min-height: 100%;
+  background: transparent;
 }
 
 /* Utilitários globais */
