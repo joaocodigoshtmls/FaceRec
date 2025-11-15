@@ -15,7 +15,15 @@ dist-ssr
 
 # Environment and secrets
 .env
+.env.local
+.env.production
+.env.production.local
 backend/.env
+backend/.env.local
+backend/.env.production
+frontend/.env
+frontend/.env.local
+frontend/.env.production
 mock-cam/.env
 
 # Build artifacts / uploads
@@ -26,6 +34,7 @@ backend/uploads/
 !.vscode/extensions.json
 .idea
 .DS_Store
+/.vercel
 *.suo
 *.ntvs*
 *.njsproj

@@ -10,8 +10,8 @@
     "dev": "npm --workspace frontend run dev",
     "dev:frontend": "npm --workspace frontend run dev",
     "dev:backend": "npm --workspace backend run dev",
-    "build": "npm --workspace frontend run build",
-    "vercel-build": "cd api && npm install --no-audit --no-fund && cd ../frontend && npm install --no-audit --no-fund && npm run build",
+    "build": "npm --workspace frontend run build && node ./scripts/sync-frontend-dist.mjs",
+    "vercel-build": "cd api && npm install --no-audit --no-fund && cd ../frontend && npm install --no-audit --no-fund && npm run build && cd .. && node ./scripts/sync-frontend-dist.mjs",
     "lint": "npm --workspace frontend run lint",
     "preview": "npm --workspace frontend run preview"
   }
