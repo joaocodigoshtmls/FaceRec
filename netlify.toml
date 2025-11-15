@@ -1,0 +1,59 @@
+# Configuração do Netlify para o Frontend (React + Vite)
+
+[build]
+  # Comando para construir o frontend
+  command = "cd frontend && npm install && npm run build"
+  
+  # Pasta que será publicada (gerada pelo Vite)
+  publish = "frontend/dist"
+  
+  # Diretório base para o build
+  base = "/"
+
+[build.environment]
+  # Versão do Node.js (usar a mesma do Railway)
+  NODE_VERSION = "20"
+  
+  # Gerenciador de pacotes
+  NPM_VERSION = "10"
+
+# Redirecionamento para SPA (Single Page Application)
+# Todas as rotas são direcionadas para o index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  
+# Headers de segurança
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+# Cache para assets estáticos
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# IMPORTANTE: Configurar as seguintes variáveis de ambiente no painel do Netlify:
+# 
+# VITE_API_URL=https://seu-backend.up.railway.app/api
+# VITE_CAM_BASE=https://seu-backend.up.railway.app
+# VITE_SOCKET_BASE=https://seu-backend.up.railway.app
+# VITE_CLASSROOM_CODE=3AT.I
+# VITE_CAM_STREAM_URL=http://localhost:8080/stream
+#
+# Obs: Substituir "seu-backend" pela URL real do Railway após o deploy
+
+# Deploy Previews (opcional - descomente se quiser previews automáticas)
+# [context.deploy-preview]
+#   command = "cd frontend && npm install && npm run build"
+#   publish = "frontend/dist"
+#
+# [context.deploy-preview.environment]
+#   NODE_VERSION = "20"
+#   # Pode usar URL de staging do Railway aqui se tiver
