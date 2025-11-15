@@ -51,7 +51,7 @@ export const register = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await prisma.user.create({
+    const user = await prisma.users.create({
       data: {
         fullName: displayName,
         email: normalizedEmail,
@@ -111,7 +111,7 @@ export const login = async (req, res) => {
   }
 
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { email: normalizedIdentifier },
       include: {
         teacherClasses: {
@@ -158,7 +158,7 @@ export const firebaseLogin = async (req, res) => {
 
   try {
     // Tenta localizar por UID ou por email
-    let user = await prisma.user.findFirst({
+    let user = await prisma.users.findFirst({
       where: {
         OR: [
           { firebaseUid: uid },
@@ -173,7 +173,7 @@ export const firebaseLogin = async (req, res) => {
     if (!user) {
       const randomPass = crypto.randomUUID();
       const passwordHash = await bcrypt.hash(randomPass, 10);
-      user = await prisma.user.create({
+      user = await prisma.users.create({
         data: {
           fullName: name || normalizedEmail,
           email: normalizedEmail,
@@ -188,7 +188,7 @@ export const firebaseLogin = async (req, res) => {
       });
     } else if (!user.firebaseUid) {
       // Atualiza UID e foto se ainda não setado
-      user = await prisma.user.update({
+      user = await prisma.users.update({
         where: { id: user.id },
         data: {
           firebaseUid: uid,

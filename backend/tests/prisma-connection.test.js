@@ -19,10 +19,10 @@ async function testConnection() {
 
     console.log("3️⃣ Testando contagem de tabelas...");
     const counts = {
-      users: await prisma.user.count(),
-      students: await prisma.student.count(),
-      classrooms: await prisma.classroom.count(),
-      attendanceLogs: await prisma.attendanceLog.count()
+      users: await prisma.users.count(),
+      students: await prisma.students.count(),
+      classrooms: await prisma.classrooms.count(),
+      attendanceLogs: await prisma.attendance_logs.count()
     };
 
     console.log("   📊 Registros no banco:");
@@ -33,7 +33,7 @@ async function testConnection() {
     console.log();
 
     console.log("4️⃣ Testando operação de leitura...");
-    const student = await prisma.student.findFirst();
+    const student = await prisma.students.findFirst();
 
     if (student) {
       console.log("   ✅ Conseguiu ler um estudante:");
@@ -46,15 +46,15 @@ async function testConnection() {
     console.log();
 
     console.log("5️⃣ Testando relacionamento (Student -> Classroom)...");
-    const studentWithClassroom = await prisma.student.findFirst({
-      where: { classroomId: { not: null } },
-      include: { classroom: true }
+    const studentWithClassroom = await prisma.students.findFirst({
+      where: { classroom_id: { not: null } },
+      include: { classrooms: true }
     });
 
-    if (studentWithClassroom && studentWithClassroom.classroom) {
+    if (studentWithClassroom && studentWithClassroom.classrooms) {
       console.log("   ✅ Relacionamento funcionando:");
       console.log(`      - Aluno: ${studentWithClassroom.nome}`);
-      console.log(`      - Sala: ${studentWithClassroom.classroom.name}`);
+      console.log(`      - Sala: ${studentWithClassroom.classrooms.name}`);
     } else {
       console.log("   ⚠️  Nenhum aluno com sala para testar relacionamento");
     }
