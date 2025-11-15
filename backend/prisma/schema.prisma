@@ -99,7 +99,7 @@ model users {
   firebaseUid    String?            @map("firebase_uid")    @unique
   profilePicture String?            @map("profile_picture") @db.VarChar(500)
   createdAt      DateTime           @map("created_at")      @default(now())
-  updatedAt      DateTime           @map("updated_at")
+  updatedAt      DateTime           @map("updated_at")      @updatedAt @default(now())
   classrooms     classrooms[]
   students       students[]
   teacherClasses teacher_classes[]
