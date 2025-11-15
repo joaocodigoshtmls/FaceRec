@@ -3,16 +3,12 @@
 
 /* === Tema base === */
 :root{
-  --bg: 8 13 26;                /* fundo profundo */
-  --bg-secondary: 11 18 34;     /* variação */
-  --card: 20 30 46;             /* superfícies */
-  --card-soft: 27 40 62;
-  --text: 226 232 240;          /* texto principal */
-  --muted: 148 163 184;         /* texto secundário */
-  --brand-hex: #ff7a1a;         /* destaque laranja */
-  --accent-primary: #38bdf8;    /* ciano */
-  --accent-secondary: #14b8a6;  /* teal */
-  --accent-warning: #f97316;
+  --bg: 248 250 252;             /* fundo clarinho */
+  --bg-secondary: 237 242 247;   /* variação */
+  --card: 255 255 255;            /* superfícies claras */
+  --card-soft: 247 250 252;
+  --text: 15 23 42;               /* texto escuro */
+  --muted: 71 85 105;             /* texto secundário */
 
   --surface-border: rgba(148, 163, 184, 0.18);
   --surface-shadow: 0 25px 60px rgba(8, 22, 48, 0.45);
@@ -30,16 +26,13 @@
 html, body, #root { height: 100%; }
 body{
   margin: 0;
-  /* Gradiente em camadas para amenizar o contraste preto/azul no fundo */
-  background-color: #01040a;
   background:
-    radial-gradient(circle at 20% 20%, rgba(30, 64, 175, 0.24), transparent 58%),
-    radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.16), transparent 62%),
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.45), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(255, 122, 26, 0.12), transparent 65%),
     linear-gradient(180deg,
       rgba(var(--bg), 1) 0%,
-      rgba(6, 13, 28, 0.98) 40%,
-      rgba(var(--bg-secondary), 0.98) 70%,
-      rgba(4, 8, 20, 1) 100%);
+      rgba(var(--bg-secondary), 1) 60%,
+      rgba(230, 231, 233, 1) 100%);
   color: rgb(var(--text));
   font-family: 'IBM Plex Sans', Inter, system-ui, ui-sans-serif, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -207,7 +200,7 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
 
 /* === Holographic global overrides === */
 .theme-holo {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 .theme-holo ::selection {
@@ -225,12 +218,12 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
 .theme-holo .bg-slate-50,
 .theme-holo .bg-neutral-50,
 .theme-holo .bg-slate-100 {
-  background-color: rgb(var(--card) / 0.78) !important;
-  border-color: var(--surface-border) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
   color: rgb(var(--text)) !important;
-  box-shadow: var(--surface-shadow);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .theme-holo .bg-blue-50 { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25); }
@@ -264,7 +257,7 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
 .theme-holo .border-green-200,
 .theme-holo .border-yellow-200,
 .theme-holo .border-neutral-200 {
-  border-color: var(--surface-border) !important;
+  border-color: rgba(148, 163, 184, 0.35) !important;
 }
 
 .theme-holo .text-gray-900,
@@ -272,49 +265,49 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
 .theme-holo .text-neutral-900,
 .theme-holo .text-gray-800,
 .theme-holo .text-slate-800 {
-  color: #f8fafc !important;
+  color: #0f172a !important;
 }
 
 .theme-holo .text-gray-700,
 .theme-holo .text-gray-600,
 .theme-holo .text-slate-600,
 .theme-holo .text-slate-500 {
-  color: rgba(var(--muted), 0.85) !important;
+  color: rgba(71, 85, 105, 0.85) !important;
 }
 
 .theme-holo .text-blue-800,
 .theme-holo .text-blue-700 {
-  color: #93c5fd !important;
+  color: #2563eb !important;
 }
 
 .theme-holo .text-green-800,
 .theme-holo .text-emerald-800 {
-  color: #86efac !important;
+  color: #047857 !important;
 }
 
 .theme-holo .shadow-sm,
 .theme-holo .shadow,
 .theme-holo .shadow-lg,
 .theme-holo .shadow-xl {
-  box-shadow: var(--surface-shadow) !important;
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08) !important;
 }
 
 .theme-holo table,
 .theme-holo th,
 .theme-holo td {
-  border-color: rgba(148, 163, 184, 0.15) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
 }
 
 .theme-holo input,
 .theme-holo select,
 .theme-holo textarea {
-  background: rgba(15,23,42,0.72);
+  background: rgba(255, 255, 255, 0.95);
   color: rgb(var(--text));
 }
 
 .theme-holo input::placeholder,
 .theme-holo textarea::placeholder {
-  color: rgba(148,163,184,0.65);
+  color: rgba(71, 85, 105, 0.55);
 }
 
 .theme-holo .glass,
@@ -324,11 +317,11 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
 
 /* === Glass + heading (landing/login) === */
 .glass {
-  background: rgba(15, 23, 42, 0.45);
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
 }
 .heading-gradient {
   background: linear-gradient(180deg, #ffffff, #dbeafe 85%);

@@ -1,0 +1,172 @@
+@baseUrl = http://localhost:3000/api
+@baseUrlVercel = https://seu-projeto.vercel.app/api
+@baseUrlAlways = https://seu-backend.alwaysdata.com/api
+
+# ===== TESTE 1: Preflight OPTIONS com access-control-request-method =====
+OPTIONS {{baseUrl}}/auth/register
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: Content-Type, Authorization
+Origin: http://localhost:5173
+
+###
+
+# ===== TESTE 2: Preflight OPTIONS com variação de origin =====
+OPTIONS {{baseUrl}}/auth/register
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: Content-Type
+Origin: https://app.vercel.app
+
+###
+
+# ===== TESTE 3: Preflight com origin não permitida (deve retornar sem header Access-Control-Allow-Origin) =====
+OPTIONS {{baseUrl}}/auth/register
+Access-Control-Request-Method: POST
+Origin: https://malicioso.com
+
+###
+
+# ===== TESTE 4: POST - Registro bem-sucedido =====
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Origin: http://localhost:5173
+
+{
+  "name": "João Silva",
+  "email": "joao.silva@example.com",
+  "password": "SenhaSegura123!"
+}
+
+###
+
+# ===== TESTE 5: POST - Email duplicado (409 Conflict) =====
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Origin: http://localhost:5173
+
+{
+  "name": "Maria Santos",
+  "email": "existente@example.com",
+  "password": "SenhaSegura123!"
+}
+
+###
+
+# ===== TESTE 6: POST - Validação: nome muito curto =====
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Origin: http://localhost:5173
+
+{
+  "name": "A",
+  "email": "teste@example.com",
+  "password": "SenhaSegura123!"
+}
+
+###
+
+# ===== TESTE 7: POST - Validação: email inválido =====
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Origin: http://localhost:5173
+
+{
+  "name": "João Silva",
+  "email": "email-invalido",
+  "password": "SenhaSegura123!"
+}
+
+###
+
+# ===== TESTE 8: POST - Validação: senha muito curta =====
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Origin: http://localhost:5173
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "123"
+}
+
+###
+
+# ===== TESTE 9: POST - Múltiplos erros de validação =====
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Origin: http://localhost:5173
+
+{
+  "name": "",
+  "email": "invalido",
+  "password": "123"
+}
+
+###
+
+# ===== TESTE 10: POST - Sem origin (CORS permissivo) =====
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Teste Sem Origin",
+  "email": "teste.sem.origin@example.com",
+  "password": "SenhaSegura123!"
+}
+
+###
+
+# ===== TESTE 11: POST via alias /api/signup =====
+POST {{baseUrl}}/signup
+Content-Type: application/json
+Origin: http://localhost:5173
+
+{
+  "name": "Carlos de Oliveira",
+  "email": "carlos@example.com",
+  "password": "SenhaSegura123!"
+}
+
+###
+
+# ===== TESTE 12: Preflight para alias /api/signup =====
+OPTIONS {{baseUrl}}/signup
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: Content-Type
+Origin: http://localhost:5173
+
+###
+
+# ===== TESTE 13: POST em produção Vercel + AlwaysData =====
+# Use o baseUrlAlways configurado acima
+POST {{baseUrlAlways}}/auth/register
+Content-Type: application/json
+Origin: https://seu-projeto.vercel.app
+
+{
+  "name": "Usuário Produção",
+  "email": "producao@example.com",
+  "password": "SenhaSegura123!"
+}
+
+###
+
+# ===== TESTE 14: Verificar headers Vary e Cache-Control =====
+OPTIONS {{baseUrl}}/auth/register
+Origin: http://localhost:5173
+
+# Esperado:
+# - Vary: Origin
+# - Cache-Control: no-cache, no-store, must-revalidate
+# - Access-Control-Allow-Origin: http://localhost:5173
+# - Access-Control-Max-Age: 86400
+
+###
+
+# ===== TESTE 15: POST com conteúdo não-JSON (deve retornar 400) =====
+POST {{baseUrl}}/auth/register
+Content-Type: text/plain
+Origin: http://localhost:5173
+
+Isso não é JSON
+
+###
