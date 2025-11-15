@@ -15,7 +15,15 @@ dist-ssr
 
 # Environment and secrets
 .env
+.env.local
+.env.production
+.env.production.local
 backend/.env
+backend/.env.local
+backend/.env.production
+frontend/.env
+frontend/.env.local
+frontend/.env.production
 mock-cam/.env
 
 # Build artifacts / uploads

@@ -266,10 +266,13 @@ const defaultOrigins = [
   'http://127.0.0.1:5173',
   'http://127.0.0.1:3000',
 ];
-// Permitimos também domínios *.vercel.app e *.alwaysdata.net
+// Permitimos também domínios *.vercel.app, *.alwaysdata.net e *.netlify.app
+// Inclui suporte para deploy previews do Netlify (deploy-preview-XXX--site.netlify.app)
 const regexOrigins = [
   /https?:\/\/([a-z0-9-]+)\.vercel\.app$/i,
   /https?:\/\/([a-z0-9-]+)\.alwaysdata\.net$/i,
+  /https?:\/\/([a-z0-9-]+)\.netlify\.app$/i,
+  /https?:\/\/deploy-preview-\d+--([a-z0-9-]+)\.netlify\.app$/i, // Netlify deploy previews
 ];
 
 const isOriginAllowed = (origin) => {
