@@ -372,3 +372,87 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
 }
 .login-scope a.link { color:#7dd3fc; }
 
+/* === Cadastro (formulário padrão) === */
+.theme-holo .cadastro-form {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem 1.75rem;
+  border-radius: 1rem;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+}
+
+.theme-holo .cadastro-form h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(var(--text));
+}
+
+/* Agrupamento de campos */
+.theme-holo .cadastro-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
+}
+
+.theme-holo .cadastro-form label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+/* Inputs nativos do formulário (sem Tailwind) */
+.theme-holo .cadastro-form input {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  padding: 0.6rem 0.9rem;
+  background: rgba(15, 23, 42, 0.9);
+  color: rgb(var(--text));
+  font-size: 0.9rem;
+}
+
+.theme-holo .cadastro-form input::placeholder {
+  color: rgba(148, 163, 184, 0.65);
+}
+
+.theme-holo .cadastro-form input:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.75);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5);
+}
+
+/* Mensagens de alerta padrão */
+.theme-holo .alert {
+  margin-bottom: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.9rem;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-holo .alert-success {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(16, 185, 129, 0.16);
+  color: rgba(209, 250, 229, 0.96);
+}
+
+.theme-holo .alert-danger {
+  border-color: rgba(248, 113, 113, 0.55);
+  background: rgba(248, 113, 113, 0.12);
+  color: rgba(254, 226, 226, 0.98);
+}
+
+/* Erros pontuais abaixo do campo */
+.theme-holo .error-text {
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  color: #f97373;
+}
+
