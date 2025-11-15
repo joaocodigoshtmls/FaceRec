@@ -10,6 +10,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
+import { register as registerController, login as loginController, firebaseLogin as firebaseLoginController } from '../controllers/authController.js';
 
 dotenv.config();
 
@@ -298,6 +299,11 @@ app.options('*', cors(corsOptions));
 
 /* ===== Body parser ===== */
 app.use(express.json({ limit: '10mb' }));
+
+/* ===== Auth Routes (public) ===== */
+app.post('/api/auth/register', registerController);
+app.post('/api/auth/login', loginController);
+app.post('/api/auth/firebase-login', firebaseLoginController);
 
 /* ===== Configuração de uploads ===== */
 const uploadsDir = path.join(process.cwd(), 'uploads', 'profile-pics');
