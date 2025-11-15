@@ -3,15 +3,23 @@
 
 /* === Tema base === */
 :root{
-  --bg: 255 255 255;             /* fundo branco */
-  --bg-secondary: 255 255 255;   /* variação branca */
-  --card: 255 255 255;            /* superfícies brancas */
-  --card-soft: 255 255 255;
-  --text: 15 23 42;               /* texto escuro */
-  --muted: 100 116 139;           /* texto secundário mais escuro */
+  /* Paleta preta + laranja */
+  --bg: 0 0 0;                  /* fundo preto profundo */
+  --bg-secondary: 12 12 12;     /* variação sutil de preto */
+  --card: 18 18 18;             /* superfícies principais */
+  --card-soft: 26 26 26;        /* superfícies suaves */
+  --text: 250 250 250;          /* texto principal bem claro */
+  --muted: 156 163 175;         /* texto secundário */
 
-  --surface-border: rgba(203, 213, 225, 0.3);
-  --surface-shadow: 0 25px 60px rgba(8, 22, 48, 0.15);
+  /* Laranja como cor de destaque principal */
+  --brand-hex: #f97316;         /* laranja principal */
+  --accent-primary: #f97316;    /* botões, links, estados ativos */
+  --accent-secondary: #fed7aa;  /* detalhes suaves em laranja claro */
+  --accent-warning: #f97316;
+
+  /* Bordas e sombras mais neutras/laranja */
+  --surface-border: rgba(249, 115, 22, 0.35);
+  --surface-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
 
   /* Layout/escala */
   --container-max: 72rem;
@@ -26,12 +34,15 @@
 html, body, #root { height: 100%; }
 body{
   margin: 0;
+  /* Gradiente em camadas com fundo preto + brilhos laranja */
+  background-color: #000000;
   background:
-    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.3), transparent 55%),
-    radial-gradient(circle at 80% 0%, rgba(255, 122, 26, 0.08), transparent 65%),
+    radial-gradient(circle at 10% 0%, rgba(249, 115, 22, 0.16), transparent 55%),
+    radial-gradient(circle at 90% 100%, rgba(249, 115, 22, 0.12), transparent 55%),
     linear-gradient(180deg,
       rgba(var(--bg), 1) 0%,
-      rgba(var(--bg-secondary), 1) 100%);
+      rgba(var(--bg-secondary), 1) 45%,
+      rgba(0, 0, 0, 1) 100%);
   color: rgb(var(--text));
   font-family: 'IBM Plex Sans', Inter, system-ui, ui-sans-serif, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -316,14 +327,14 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
 
 /* === Glass + heading (landing/login) === */
 .glass {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+  background: linear-gradient(140deg, rgba(18, 18, 18, 0.96), rgba(10, 10, 10, 0.94));
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
 }
 .heading-gradient {
-  background: linear-gradient(180deg, #ffffff, #dbeafe 85%);
+  background: linear-gradient(180deg, #fed7aa, #f97316 85%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
