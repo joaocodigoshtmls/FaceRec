@@ -30,9 +30,15 @@
 html, body, #root { height: 100%; }
 body{
   margin: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(30, 64, 175, 0.24), transparent 58%),
-              radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.16), transparent 62%),
-              rgb(var(--bg));
+  /* Gradiente em camadas para amenizar o contraste preto/azul no fundo */
+  background:
+    radial-gradient(circle at 20% 20%, rgba(30, 64, 175, 0.24), transparent 58%),
+    radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.16), transparent 62%),
+    linear-gradient(180deg,
+      rgba(var(--bg), 1) 0%,
+      rgba(6, 13, 28, 0.98) 40%,
+      rgba(var(--bg-secondary), 0.98) 70%,
+      rgba(4, 8, 20, 1) 100%);
   color: rgb(var(--text));
   font-family: 'IBM Plex Sans', Inter, system-ui, ui-sans-serif, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
