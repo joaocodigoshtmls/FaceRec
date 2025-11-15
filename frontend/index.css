@@ -3,15 +3,15 @@
 
 /* === Tema base === */
 :root{
-  --bg: 248 250 252;             /* fundo clarinho */
-  --bg-secondary: 237 242 247;   /* variação */
-  --card: 255 255 255;            /* superfícies claras */
-  --card-soft: 247 250 252;
+  --bg: 255 255 255;             /* fundo branco */
+  --bg-secondary: 255 255 255;   /* variação branca */
+  --card: 255 255 255;            /* superfícies brancas */
+  --card-soft: 255 255 255;
   --text: 15 23 42;               /* texto escuro */
-  --muted: 71 85 105;             /* texto secundário */
+  --muted: 100 116 139;           /* texto secundário mais escuro */
 
-  --surface-border: rgba(148, 163, 184, 0.18);
-  --surface-shadow: 0 25px 60px rgba(8, 22, 48, 0.45);
+  --surface-border: rgba(203, 213, 225, 0.3);
+  --surface-shadow: 0 25px 60px rgba(8, 22, 48, 0.15);
 
   /* Layout/escala */
   --container-max: 72rem;
@@ -27,12 +27,11 @@ html, body, #root { height: 100%; }
 body{
   margin: 0;
   background:
-    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.45), transparent 55%),
-    radial-gradient(circle at 80% 0%, rgba(255, 122, 26, 0.12), transparent 65%),
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.3), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(255, 122, 26, 0.08), transparent 65%),
     linear-gradient(180deg,
       rgba(var(--bg), 1) 0%,
-      rgba(var(--bg-secondary), 1) 60%,
-      rgba(230, 231, 233, 1) 100%);
+      rgba(var(--bg-secondary), 1) 100%);
   color: rgb(var(--text));
   font-family: 'IBM Plex Sans', Inter, system-ui, ui-sans-serif, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
