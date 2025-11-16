@@ -45,7 +45,7 @@ export default function Navbar() {
   const closeMenu = () => setOpen(false);
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur supports-[backdrop-filter]:bg-black/30">
+    <nav className="sticky top-0 z-50 border-b border-orange-500/20 bg-black/40 backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="group inline-flex items-center gap-3" onClick={closeMenu}>
           <div className="grid h-9 w-9 place-items-center rounded-xl bg-white/5 ring-1 ring-white/10 overflow-hidden">

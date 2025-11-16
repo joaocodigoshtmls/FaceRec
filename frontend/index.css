@@ -35,9 +35,17 @@ html, body, #root { height: 100%; }
 
 body{
   margin: 0;
-  /* Fundo totalmente preto, sem gradiente azulado */
+  /* Gradiente: preto no centro com brilhos laranja nas pontas */
+  background:
+    radial-gradient(circle at 0% 0%, rgba(249, 115, 22, 0.18), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(249, 115, 22, 0.14), transparent 60%),
+    linear-gradient(
+      180deg,
+      rgb(0, 0, 0) 0%,
+      rgb(12, 12, 12) 45%,
+      rgb(0, 0, 0) 100%
+    );
   background-color: #000000;
-  background: #000000;
   color: rgb(var(--text));
   font-family: 'IBM Plex Sans', Inter, system-ui, ui-sans-serif, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -46,6 +54,7 @@ body{
   font-size: 16px;
   font-weight: 400;
   min-height: 100%;
+  background-attachment: fixed;
 }
 
 body::before {
