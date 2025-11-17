@@ -375,11 +375,19 @@ export function DataProvider({ children }) {
     return updatedSala;
   }, []);
 
-  const deleteSala = useCallback((id) => {
+  const deleteSala = useCallback(async (id) => {
     const targetId = toOptionalString(id);
-    if (!targetId) return;
-    setSalas((prev) => prev.filter((sala) => toOptionalString(sala.id) !== targetId));
-    setAlunos((prev) => prev.filter((aluno) => toOptionalString(aluno.salaId) !== targetId));
+    if (!targetId) return { success: false, error: 'ID inválido' };
+
+    try {
+      await api.delete(`/classrooms/${targetId}`);
+      setSalas((prev) => prev.filter((sala) => toOptionalString(sala.id) !== targetId));
+      setAlunos((prev) => prev.filter((aluno) => toOptionalString(aluno.salaId) !== targetId));
+      return { success: true };
+    } catch (error) {
+      console.error('[DataContext] Falha ao remover sala no servidor', error);
+      throw error;
+    }
   }, []);
 
   const reset = useCallback(() => {

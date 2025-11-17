@@ -93,15 +93,20 @@ export default function SalasPage() {
     });
   };
 
-  const handleDeleteSala = (sala) => {
+  const handleDeleteSala = async (sala) => {
     if (!sala) return;
     const totalVinculos = alunosPorSala.get(sala.id)?.length ?? 0;
     const confirmMessage = totalVinculos
       ? `A sala “${sala.nome}” possui ${totalVinculos} aluno(s) vinculado(s). Deseja remover mesmo assim?`
       : `Remover a sala “${sala.nome}”?`;
-    if (window.confirm(confirmMessage)) {
-      deleteSala(sala.id);
+    if (!window.confirm(confirmMessage)) return;
+
+    try {
+      await deleteSala(sala.id);
       setStatus({ type: "ok", message: `Sala “${sala.nome}” removida.` });
+    } catch (error) {
+      console.error('[SalasPage] Erro ao remover sala', error);
+      setStatus({ type: "error", message: `Não foi possível remover a sala “${sala.nome}”. Tente novamente.` });
     }
   };
 
