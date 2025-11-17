@@ -99,7 +99,7 @@ export default function RelatoriosPage() {
                   setSelectedSalaId(e.target.value || null);
                   setSelectedAlunoId(null);
                 }}
-                className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-sm text-slate-200"
+                className="report-field w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-sm text-slate-200"
               >
                 {salas.map((s) => (
                   <option key={s.id} value={normalizeId(s.id) || ""} className="bg-slate-900">
@@ -119,7 +119,7 @@ export default function RelatoriosPage() {
                 value={searchAluno}
                 onChange={(e) => setSearchAluno(e.target.value)}
                 placeholder="Buscar por nome"
-                className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-sm text-slate-200 placeholder:text-slate-500"
+                className="report-field w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-sm text-slate-200 placeholder:text-slate-500"
               />
               <button
                 onClick={() => setSearchAluno("")}

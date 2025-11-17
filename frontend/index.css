@@ -362,6 +362,20 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
   box-shadow: 0 0 0 2px rgba(56,189,248,0.6);
   border-color: rgba(56,189,248,0.5);
 }
+.login-scope .report-field {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  background: rgba(12, 12, 12, 0.9);
+  color: rgb(var(--text));
+  caret-color: rgb(var(--text));
+}
+.login-scope select.report-field option {
+  background: #050505;
+  color: rgb(var(--text));
+}
+.login-scope .report-field::placeholder {
+  color: rgba(248, 250, 252, 0.45);
+}
 .login-scope .input-row { position: relative; }
 .login-scope .input-row .icon {
   position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
