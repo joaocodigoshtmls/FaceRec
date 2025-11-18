@@ -245,8 +245,22 @@ export default function ChamadaPage() {
                   </div>
                 )}
                 {videoError && (
-                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/80 p-6 text-center text-sm text-rose-200">
-                    Não foi possível carregar o vídeo. Conecte sua câmera e clique em Iniciar ou configure um feed ao vivo.
+                  <div className="absolute inset-0 flex items-center justify-center bg-slate-950/85 p-6 text-center">
+                    <div className="pointer-events-auto flex w-full max-w-sm flex-col items-center gap-4 text-sm text-slate-100">
+                      <p className="text-base font-medium text-white">
+                        É preciso do protótipo em mãos um cadastro prévio para ver o seu funcionamento.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!requestingCam) startCamera();
+                        }}
+                        disabled={requestingCam}
+                        className="w-full rounded-xl border border-emerald-400/50 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {requestingCam ? "Conectando…" : "Usar a minha câmera frontal"}
+                      </button>
+                    </div>
                   </div>
                 )}
                 {usingCamera && (

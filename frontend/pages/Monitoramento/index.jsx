@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Loader2, Monitor } from "lucide-react";
 import useDynamicTitle from "@/lib/useDynamicTitle";
 
@@ -12,6 +13,7 @@ export default function MonitoramentoPage() {
 
   const [videoLoading, setVideoLoading] = useState(true);
   const [videoError, setVideoError] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="login-scope min-h-[70vh] text-slate-200">
@@ -62,8 +64,19 @@ export default function MonitoramentoPage() {
                   </div>
                 )}
                 {videoError && (
-                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/80 p-6 text-center text-sm text-rose-200">
-                    Não foi possível carregar o stream de demonstração. Conecte sua câmera ou configure o feed ao vivo.
+                  <div className="absolute inset-0 flex items-center justify-center bg-slate-950/85 p-6 text-center">
+                    <div className="pointer-events-auto flex w-full max-w-sm flex-col items-center gap-4 text-sm text-slate-100">
+                      <p className="text-base font-medium text-white">
+                        É preciso do protótipo em mãos um cadastro prévio para ver o seu funcionamento.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/chamada")}
+                        className="w-full rounded-xl border border-emerald-400/50 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-500/20"
+                      >
+                        Usar a minha câmera frontal
+                      </button>
+                    </div>
                   </div>
                 )}
                 <div className="pointer-events-none absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-rose-500/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
