@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { to: "/dados", label: "Dados" },
   { to: "/relatorios", label: "Relatórios" },
   { to: "/monitoramento", label: "Monitoramento" },
+  { to: "/perfil", label: "Perfil" },
 ];
 
 export default function Navbar() {

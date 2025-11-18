@@ -26,6 +26,8 @@ export default function SalasPage() {
   const [selectedSalaId, setSelectedSalaId] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
+  const [pendingSala, setPendingSala] = useState(null);
+  const [isDeletingSala, setIsDeletingSala] = useState(false);
 
   useDynamicTitle({
     title: "Salas · FaceRec",
@@ -93,21 +95,30 @@ export default function SalasPage() {
     });
   };
 
-  const handleDeleteSala = async (sala) => {
-    if (!sala) return;
-    const totalVinculos = alunosPorSala.get(sala.id)?.length ?? 0;
-    const confirmMessage = totalVinculos
-      ? `A sala “${sala.nome}” possui ${totalVinculos} aluno(s) vinculado(s). Deseja remover mesmo assim?`
-      : `Remover a sala “${sala.nome}”?`;
-    if (!window.confirm(confirmMessage)) return;
+  const requestDeleteSala = (sala) => {
+    setStatus(null);
+    setPendingSala(sala);
+  };
+
+  const handleDeleteSala = async () => {
+    if (!pendingSala) return;
+    setIsDeletingSala(true);
 
     try {
-      await deleteSala(sala.id);
-      setStatus({ type: "ok", message: `Sala “${sala.nome}” removida.` });
+      await deleteSala(pendingSala.id);
+      setStatus({ type: "ok", message: `Sala “${pendingSala.nome}” removida.` });
+      setPendingSala(null);
     } catch (error) {
       console.error('[SalasPage] Erro ao remover sala', error);
-      setStatus({ type: "error", message: `Não foi possível remover a sala “${sala.nome}”. Tente novamente.` });
+      setStatus({ type: "error", message: `Não foi possível remover a sala “${pendingSala.nome}”. Tente novamente.` });
+    } finally {
+      setIsDeletingSala(false);
     }
+  };
+
+  const cancelDeleteSala = () => {
+    if (isDeletingSala) return;
+    setPendingSala(null);
   };
 
   const selectedSala = selectedSalaId ? salaPorId.get(selectedSalaId) : null;
@@ -246,7 +257,7 @@ export default function SalasPage() {
                             <Users className="h-4 w-4" /> Mostrar alunos
                           </button>
                           <button
-                            onClick={() => handleDeleteSala(sala)}
+                            onClick={() => requestDeleteSala(sala)}
                             className="inline-flex items-center gap-2 rounded-lg border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-rose-200 transition hover:bg-rose-500/20"
                           >
                             <Trash2 className="h-4 w-4" /> Remover
@@ -371,6 +382,42 @@ export default function SalasPage() {
           </div>
         </section>
       </section>
+      {pendingSala && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={cancelDeleteSala} />
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-slate-900/90 p-6 text-sm text-slate-200 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-white">Remover sala</h3>
+              <button
+                onClick={cancelDeleteSala}
+                className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs uppercase tracking-wide text-slate-400 hover:bg-white/10"
+                disabled={isDeletingSala}
+              >
+                Fechar
+              </button>
+            </div>
+            <p className="mt-4 text-slate-300">
+              Tem certeza que deseja remover a sala “{pendingSala.nome}”? Essa ação também remove {alunosPorSala.get(pendingSala.id)?.length ?? 0} aluno(s) vinculados a ela.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                onClick={cancelDeleteSala}
+                className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-medium text-slate-200 transition hover:bg-white/10"
+                disabled={isDeletingSala}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleDeleteSala}
+                className="flex-1 rounded-xl border border-rose-500/40 bg-rose-500/20 px-4 py-2 font-semibold text-rose-100 transition hover:bg-rose-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isDeletingSala}
+              >
+                {isDeletingSala ? 'Removendo...' : 'Remover sala'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
