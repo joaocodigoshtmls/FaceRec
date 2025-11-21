@@ -5,26 +5,21 @@ import useDynamicTitle from "@/lib/useDynamicTitle";
 import { useUser } from "@/contexts/UserContext";
 import { createTemplateCSV } from "@/lib/csv";
 import { useData } from "@/contexts/DataContext";
+import PageShell from "@/Components/PageShell";
+import GlassSection from "@/Components/GlassSection";
+import PageHeader from "@/Components/PageHeader";
+import StatusAlert from "@/Components/StatusAlert";
+import ActionButton from "@/Components/ActionButton";
 
 const sampleCsvHref = new URL("../../../resources/tests/test-csv.csv", import.meta.url).href;
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
-const statusStyles = {
-  ok: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
-  warn: "border-amber-500/40 bg-amber-500/10 text-amber-300",
-  error: "border-rose-500/40 bg-rose-500/10 text-rose-300",
-  loading: "border-sky-400/40 bg-sky-400/10 text-sky-200",
-  info: "border-white/10 bg-white/5 text-slate-300",
-};
 
 export default function DadosPage() {
   useDynamicTitle({
     title: "Dados · FaceRec",
     description: "Importe alunos e salas a partir de um CSV.",
   });
-
-  const navigate = useNavigate();
   const { usuario, isSupervisor, isProfessor } = useUser();
   const { importCSV, importRecords, salas, alunos, lastImport } = useData();
 
@@ -159,12 +154,12 @@ export default function DadosPage() {
 
   if (!hasTeacherPermission) {
     return (
-      <div className="login-scope min-h-[70vh] text-slate-200">
-        <section className="glass mx-auto max-w-3xl rounded-2xl p-6 md:p-8">
+      <PageShell>
+        <GlassSection maxWidth="max-w-3xl">
           <h1 className="heading-gradient text-2xl font-semibold md:text-3xl">Acesso restrito</h1>
           <p className="mt-2 text-slate-400">Faça login como <b>professor</b> ou <b>admin</b> para importar dados.</p>
-        </section>
-      </div>
+        </GlassSection>
+      </PageShell>
     );
   }
 
@@ -172,34 +167,16 @@ export default function DadosPage() {
   const salaMap = preview?.parsed?.salaMap || {};
 
   return (
-    <div className="login-scope min-h-[70vh] text-slate-200">
-      <section className="glass mx-auto max-w-6xl rounded-2xl p-6 md:p-8">
-        <header className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="heading-gradient text-2xl font-semibold md:text-3xl">Dados · Importação de CSV</h1>
-            <p className="mt-1 text-sm text-slate-400">
-              Importe alunos e salas a partir de um CSV. Aceita delimitador <code>;</code> ou <code>,</code> e cabeçalhos flexíveis.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Voltar
-          </button>
-        </header>
+    <PageShell>
+      <GlassSection>
+        <PageHeader
+          title="Dados · Importação de CSV"
+          description={<>Importe alunos e salas a partir de um CSV. Aceita delimitador <code>;</code> ou <code>,</code> e cabeçalhos flexíveis.</>}
+          showBackButton
+        />
 
         {status?.msg && (
-          <div className={`mb-4 flex items-center gap-3 rounded-lg border p-3 text-sm ${statusStyles[status.type] || statusStyles.info}`}>
-            {status.type === "loading" && <Loader2 className="h-4 w-4 animate-spin" />}
-            {status.type === "ok" && <CheckCircle2 className="h-4 w-4" />}
-            {status.type === "warn" && <AlertTriangle className="h-4 w-4" />}
-            {status.type === "error" && <XCircle className="h-4 w-4" />}
-            {!status.type && <AlertTriangle className="h-4 w-4" />}
-            <span>{status.msg}</span>
-          </div>
+          <StatusAlert type={status.type} message={status.msg} className="mb-4" />
         )}
 
         <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -325,14 +302,14 @@ export default function DadosPage() {
                   </table>
                 </div>
                 <p className="text-xs text-slate-500">Exibindo até 8 primeiros alunos.</p>
-                <button
-                  type="button"
+                <ActionButton
+                  variant="solid"
+                  icon={importing ? Loader2 : CheckCircle2}
                   onClick={handleImport}
                   disabled={importing || !preview.parsed.alunos.length}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#ff8a3d] to-[#ff5c00] px-4 py-2 text-sm font-medium text-white shadow-[0_8px_20px_rgba(255,100,30,0.35)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />} Importar agora
-                </button>
+                  Importar agora
+                </ActionButton>
               </div>
             )}
           </div>
@@ -348,7 +325,7 @@ export default function DadosPage() {
             </span>
           </div>
         </div>
-      </section>
-    </div>
+      </GlassSection>
+    </PageShell>
   );
 }

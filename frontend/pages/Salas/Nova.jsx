@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Plus } from "lucide-react";
 import useDynamicTitle from "@/lib/useDynamicTitle";
 import { useData } from "@/contexts/DataContext";
+import PageShell from "@/Components/PageShell";
+import GlassSection from "@/Components/GlassSection";
+import PageHeader from "@/Components/PageHeader";
+import StatusAlert from "@/Components/StatusAlert";
+import FormField from "@/Components/FormField";
+import ActionButton from "@/Components/ActionButton";
 
 export default function NovaSalaPage() {
   const navigate = useNavigate();
@@ -35,64 +41,46 @@ export default function NovaSalaPage() {
   };
 
   return (
-    <div className="login-scope min-h-[70vh] text-slate-200">
-      <section className="glass mx-auto max-w-3xl rounded-2xl p-6 md:p-8">
-        <header className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="heading-gradient text-2xl font-semibold md:text-3xl">Cadastrar nova sala</h1>
-            <p className="mt-1 text-sm text-slate-400">Defina o nome e o período para começar a acompanhar presença.</p>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
-          >
-            <ArrowLeft className="h-4 w-4" /> Voltar
-          </button>
-        </header>
+    <PageShell>
+      <GlassSection maxWidth="max-w-3xl">
+        <PageHeader
+          title="Cadastrar nova sala"
+          description="Defina o nome e o período para começar a acompanhar presença."
+          showBackButton
+        />
 
         {status?.message && (
-          <div
-            className={`mb-4 rounded-lg border p-3 text-sm ${
-              status.type === "ok"
-                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-200"
-                : "border-rose-500/40 bg-rose-500/10 text-rose-200"
-            }`}
-          >
-            {status.message}
-          </div>
+          <StatusAlert type={status.type} message={status.message} className="mb-4" />
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5 text-sm">
-          <div>
-            <label className="mb-2 block text-xs text-slate-400">Nome da sala *</label>
-            <input
-              value={nomeSala}
-              onChange={(event) => setNomeSala(event.target.value)}
-              placeholder="Ex: 3º Ano A"
-              className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-slate-200 outline-none transition focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/40"
-              required
-            />
-          </div>
+          <FormField
+            label="Nome da sala"
+            name="nomeSala"
+            value={nomeSala}
+            onChange={(event) => setNomeSala(event.target.value)}
+            placeholder="Ex: 3º Ano A"
+            required
+          />
 
-          <div>
-            <label className="mb-2 block text-xs text-slate-400">Período (opcional)</label>
-            <input
-              value={periodo}
-              onChange={(event) => setPeriodo(event.target.value)}
-              placeholder="Manhã, Tarde, Integral..."
-              className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-slate-200 outline-none transition focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/40"
-            />
-          </div>
+          <FormField
+            label="Período (opcional)"
+            name="periodo"
+            value={periodo}
+            onChange={(event) => setPeriodo(event.target.value)}
+            placeholder="Manhã, Tarde, Integral..."
+          />
 
-          <button
+          <ActionButton
             type="submit"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#38bdf8] to-[#2563eb] px-4 py-2 text-sm font-medium text-white shadow-[0_8px_20px_rgba(37,99,235,0.35)] transition hover:brightness-110"
+            variant="solid"
+            icon={Plus}
+            className="w-full justify-center bg-gradient-to-b from-[#38bdf8] to-[#2563eb] shadow-[0_8px_20px_rgba(37,99,235,0.35)]"
           >
-            <Plus className="h-4 w-4" /> Salvar sala
-          </button>
+            Salvar sala
+          </ActionButton>
         </form>
-      </section>
-    </div>
+      </GlassSection>
+    </PageShell>
   );
 }

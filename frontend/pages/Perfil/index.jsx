@@ -24,6 +24,10 @@ import {
 import { useUser } from "@/contexts/UserContext";
 import { useData } from "@/contexts/DataContext";
 import useDynamicTitle from "@/lib/useDynamicTitle";
+import PageShell from "@/Components/PageShell";
+import StatCard from "@/Components/StatCard";
+import SectionCard from "@/Components/SectionCard";
+import ActionButton from "@/Components/ActionButton";
 
 const numberFormatter = new Intl.NumberFormat("pt-BR");
 
@@ -246,7 +250,7 @@ export default function PerfilPage() {
   };
 
   return (
-    <div className="login-scope min-h-[80vh] text-slate-200">
+    <PageShell minHeight="min-h-[80vh]">
       <div className="mx-auto max-w-6xl px-6 py-10 space-y-8">
         <section className="glass rounded-3xl border border-white/10 p-6 md:p-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -300,33 +304,31 @@ export default function PerfilPage() {
 
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
-            <article key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="flex items-center justify-between text-xs uppercase tracking-wide text-slate-400">
-                {stat.label}
-                <stat.icon className="h-4 w-4 text-white/70" />
-              </div>
-              <p className="mt-2 text-3xl font-semibold text-white">{stat.value}</p>
-              <p className="text-xs text-slate-500">{stat.hint}</p>
-            </article>
+            <StatCard
+              key={stat.label}
+              label={stat.label}
+              value={stat.value}
+              hint={stat.hint}
+              icon={stat.icon}
+            />
           ))}
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
           <div className="space-y-6">
-            <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <header className="mb-4 flex items-center justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Informações gerais</p>
-                  <h2 className="text-xl font-semibold text-white">Identidade e contatos</h2>
-                </div>
-                <button
-                  type="button"
+            <SectionCard
+              title="Identidade e contatos"
+              kicker="Informações gerais"
+              headerAction={
+                <ActionButton
+                  variant="outlined"
+                  icon={ArrowRight}
                   onClick={() => navigate("/dados", { state: { tab: "perfil" } })}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/10"
                 >
-                  <ArrowRight className="h-4 w-4" /> Editar dados
-                </button>
-              </header>
+                  Editar dados
+                </ActionButton>
+              }
+            >
               <dl className="grid gap-4 text-sm text-slate-300 md:grid-cols-2">
                 <div>
                   <dt className="text-xs uppercase tracking-wide text-slate-500">Instituição</dt>
@@ -345,11 +347,9 @@ export default function PerfilPage() {
                   <dd className="mt-1 text-base text-white">{profile.criadoEm}</dd>
                 </div>
               </dl>
-            </article>
+            </SectionCard>
 
-            <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Preferências</p>
-              <h2 className="text-xl font-semibold text-white">Alertas e notificações</h2>
+            <SectionCard title="Alertas e notificações" kicker="Preferências">
               <div className="mt-4 space-y-4">
                 {preferenceToggles.map((pref) => (
                   <div key={pref.label} className="flex items-start gap-4 rounded-2xl border border-white/10 bg-slate-900/40 p-4">
@@ -372,11 +372,9 @@ export default function PerfilPage() {
                   </div>
                 ))}
               </div>
-            </article>
+            </SectionCard>
 
-            <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Atalhos</p>
-              <h2 className="text-xl font-semibold text-white">Acesso rápido</h2>
+            <SectionCard title="Acesso rápido" kicker="Atalhos">
               <div className="mt-4 grid gap-4 md:grid-cols-3">
                 {quickActions.map((action) => (
                   <button
@@ -393,13 +391,11 @@ export default function PerfilPage() {
                   </button>
                 ))}
               </div>
-            </article>
+            </SectionCard>
           </div>
 
           <div className="space-y-6">
-            <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Linha do tempo</p>
-              <h2 className="text-xl font-semibold text-white">Atividades recentes</h2>
+            <SectionCard title="Atividades recentes" kicker="Linha do tempo">
               <div className="mt-4 space-y-5">
                 {timeline.map((entry) => (
                   <div key={entry.title + entry.time} className="relative pl-6">
@@ -410,11 +406,9 @@ export default function PerfilPage() {
                   </div>
                 ))}
               </div>
-            </article>
+            </SectionCard>
 
-            <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Insights</p>
-              <h2 className="text-xl font-semibold text-white">Progresso individual</h2>
+            <SectionCard title="Progresso individual" kicker="Insights">
               <div className="mt-4 space-y-4 text-sm text-slate-300">
                 <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
                   <div className="flex items-start justify-between">
@@ -444,10 +438,10 @@ export default function PerfilPage() {
                   </div>
                 </div>
               </div>
-            </article>
+            </SectionCard>
           </div>
         </section>
       </div>
-    </div>
+    </PageShell>
   );
 }

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Monitor } from "lucide-react";
 import useDynamicTitle from "@/lib/useDynamicTitle";
+import PageShell from "@/Components/PageShell";
+import GlassSection from "@/Components/GlassSection";
+import PageHeader from "@/Components/PageHeader";
 
 const SAMPLE_STREAM = "https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4";
 
@@ -16,12 +19,12 @@ export default function MonitoramentoPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="login-scope min-h-[70vh] text-slate-200">
-      <section className="glass mx-auto max-w-6xl rounded-2xl p-6 md:p-8">
-        <header className="mb-6">
-          <h1 className="heading-gradient text-2xl font-semibold md:text-3xl">Monitoramento</h1>
-          <p className="mt-1 text-sm text-slate-400">Feed geral para acompanhar o vídeo/câmera (sem chamada).</p>
-        </header>
+    <PageShell>
+      <GlassSection>
+        <PageHeader
+          title="Monitoramento"
+          description="Feed geral para acompanhar o vídeo/câmera (sem chamada)."
+        />
 
         <div className="space-y-6">
           <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-4">
@@ -87,7 +90,7 @@ export default function MonitoramentoPage() {
             </div>
           {/* Espaço reservado para futuros indicadores de sistema/câmera */}
         </div>
-      </section>
-    </div>
+      </GlassSection>
+    </PageShell>
   );
 }

@@ -4,6 +4,12 @@ import { Plus, Users, LayoutGrid, Calendar, Trash2, ArrowRight, ClipboardList, S
 import AlunoPresencaCard from "@/assets/Components/AlunoPresencaCard";
 import useDynamicTitle from "@/lib/useDynamicTitle";
 import { useData } from "@/contexts/DataContext";
+import PageShell from "@/Components/PageShell";
+import GlassSection from "@/Components/GlassSection";
+import PageHeader from "@/Components/PageHeader";
+import StatCard from "@/Components/StatCard";
+import StatusAlert from "@/Components/StatusAlert";
+import ActionButton from "@/Components/ActionButton";
 
 export default function SalasPage() {
   const navigate = useNavigate();
@@ -124,55 +130,45 @@ export default function SalasPage() {
   const selectedSala = selectedSalaId ? salaPorId.get(selectedSalaId) : null;
 
   return (
-    <div className="login-scope min-h-[70vh] text-slate-200">
-      <section className="glass mx-auto max-w-6xl rounded-2xl p-6 md:p-8">
-        <header className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="inline-flex items-center gap-2 self-start rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
+    <PageShell>
+      <GlassSection>
+        <PageHeader
+          title="Salas de Aula"
+          description="Organize turmas, atribua períodos e acompanhe a presença rapidamente."
+          showBackButton
+          actions={
+            <ActionButton
+              variant="outlined"
+              icon={ClipboardList}
+              onClick={() => navigate('/dados')}
             >
-              <ArrowLeft className="h-4 w-4" /> Voltar
-            </button>
-            <div>
-              <h1 className="heading-gradient text-2xl font-semibold md:text-3xl">Salas de Aula</h1>
-              <p className="mt-1 text-sm text-slate-400">Organize turmas, atribua períodos e acompanhe a presença rapidamente.</p>
-            </div>
-          </div>
-          <button
-            onClick={() => navigate('/dados')}
-            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10">
-            <ClipboardList className="h-4 w-4" />
-            Importar dados
-          </button>
-        </header>
+              Importar dados
+            </ActionButton>
+          }
+        />
 
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <div className="flex items-center justify-between text-xs uppercase tracking-wide text-slate-400">
-              Total de salas
-              <LayoutGrid className="h-4 w-4 text-slate-300" />
-            </div>
-            <p className="mt-2 text-3xl font-semibold text-white">{stats.totalSalas}</p>
-            <p className="text-xs text-slate-500">Turmas cadastradas neste ambiente</p>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <div className="flex items-center justify-between text-xs uppercase tracking-wide text-slate-400">
-              Alunos vinculados
-              <Users className="h-4 w-4 text-emerald-300" />
-            </div>
-            <p className="mt-2 text-3xl font-semibold text-white">{stats.totalAlunos}</p>
-            <p className="text-xs text-slate-500">Somatório de alunos nas salas ativas</p>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <div className="flex items-center justify-between text-xs uppercase tracking-wide text-slate-400">
-              Períodos distintos
-              <Calendar className="h-4 w-4 text-sky-300" />
-            </div>
-            <p className="mt-2 text-3xl font-semibold text-white">{stats.periodos}</p>
-            <p className="text-xs text-slate-500">Manhã, tarde, noite ou customizados</p>
-          </div>
+          <StatCard
+            label="Total de salas"
+            value={stats.totalSalas}
+            hint="Turmas cadastradas neste ambiente"
+            icon={LayoutGrid}
+            iconColor="text-slate-300"
+          />
+          <StatCard
+            label="Alunos vinculados"
+            value={stats.totalAlunos}
+            hint="Somatório de alunos nas salas ativas"
+            icon={Users}
+            iconColor="text-emerald-300"
+          />
+          <StatCard
+            label="Períodos distintos"
+            value={stats.periodos}
+            hint="Manhã, tarde, noite ou customizados"
+            icon={Calendar}
+            iconColor="text-sky-300"
+          />
         </div>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -191,15 +187,7 @@ export default function SalasPage() {
             </div>
 
             {status?.message && (
-              <div
-                className={`mb-4 rounded-lg border p-3 text-xs ${
-                  status.type === "ok"
-                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-200"
-                    : "border-rose-500/40 bg-rose-500/10 text-rose-200"
-                }`}
-              >
-                {status.message}
-              </div>
+              <StatusAlert type={status.type} message={status.message} className="mb-4 text-xs" />
             )}
 
             {sortedSalas.length === 0 ? (
@@ -381,7 +369,7 @@ export default function SalasPage() {
             )}
           </div>
         </section>
-      </section>
+      </GlassSection>
       {pendingSala && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={cancelDeleteSala} />
@@ -418,6 +406,6 @@ export default function SalasPage() {
           </div>
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }
