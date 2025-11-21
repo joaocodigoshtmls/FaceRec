@@ -383,6 +383,67 @@ img, video, canvas{ max-width:100%; height:auto; border-radius: 12px; }
 .ringPulse { transform-origin: 280px 280px; animation: pulse 4.6s ease-in-out infinite; }
 .twinkle   { animation: twinkle 3.8s ease-in-out infinite; }
 
+/* === OVERRIDES FINAIS PARA O MODO CLARO (theme-holo) ===================== */
+/* Deixa a paleta coerente quando o body estiver com class="theme-holo"      */
+
+.theme-holo [class*="min-h-screen"],
+.theme-holo [class*="min-h-[70vh]"] {
+  /* garante fundo e texto consistentes nas páginas raiz */
+  background-color: rgb(var(--bg));
+  color: rgb(var(--text));
+}
+
+/* Superfícies que eram bem escuras (hero, login, navbar) viram cartões claros */
+.theme-holo .glass {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(148, 163, 184, 0.40);
+  box-shadow: 0 22px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* Qualquer fundo quase preto no Tailwind vira superfície clara no modo claro */
+.theme-holo [class*="bg-[#0b1220]"],
+.theme-holo [class*="bg-slate-900"],
+.theme-holo [class*="bg-slate-950"],
+.theme-holo [class*="bg-gray-900"],
+.theme-holo [class*="bg-black"] {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Bordas brancas viram cinza-claro em vez de “brilho” no modo claro */
+.theme-holo [class*="border-white/5"],
+.theme-holo [class*="border-white/10"],
+.theme-holo [class*="border-white/20"] {
+  border-color: rgba(148, 163, 184, 0.25) !important;
+}
+
+/* Textos forçados para branco ficam com o texto padrão escuro no modo claro */
+.theme-holo [class*="text-white"],
+.theme-holo [class*="text-slate-50"],
+.theme-holo [class*="text-slate-100"],
+.theme-holo [class*="text-slate-200"] {
+  color: rgb(var(--text)) !important;
+}
+
+/* Textos “apagadinhos” continuam muted, mas agora em cinza-escuro */
+.theme-holo [class*="text-slate-300"],
+.theme-holo [class*="text-slate-400"],
+.theme-holo [class*="text-slate-500"] {
+  color: rgb(var(--muted)) !important;
+}
+
+/* Inputs de login/cadastro: no modo claro ficam brancos, com borda cinza */
+.theme-holo .login-scope .input-dark,
+.theme-holo .cadastro-form input {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(148, 163, 184, 0.45);
+  color: rgb(var(--text));
+}
+
+.theme-holo .login-scope .input-dark::placeholder,
+.theme-holo .cadastro-form input::placeholder {
+  color: rgba(148, 163, 184, 0.70);
+}
+
 /* === Login/Cadastro (escopo seguro) === */
 .login-scope .input-dark {
   width: 100%;
