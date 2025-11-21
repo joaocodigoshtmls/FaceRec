@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X, LogOut, Moon, Sun } from "lucide-react";
 import LogoCamera from "@/Components/LogoCamera";
 import { useUser } from "@/contexts/UserContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const NAV_LINKS = [
   { to: "/salas", label: "Salas" },
@@ -17,6 +18,7 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { usuario, logout } = useUser();
+  const { isLight, toggleTheme } = useTheme();
 
   const activePath = location.pathname;
 
@@ -44,6 +46,16 @@ export default function Navbar() {
   };
 
   const closeMenu = () => setOpen(false);
+  const nextThemeLabel = isLight ? "Modo escuro" : "Modo claro";
+  const themeButtonClasses = isLight
+    ? "inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white/80 px-4 py-2 text-xs font-semibold text-slate-800 shadow-sm transition hover:bg-white"
+    : "inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10";
+  const themeButtonMobileClasses = isLight
+    ? "inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-white"
+    : "inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10";
+  const themeButtonIconClasses = isLight
+    ? "grid h-10 w-10 place-items-center rounded-lg border border-slate-300 bg-white/80 text-slate-800 shadow-sm transition hover:bg-white"
+    : "grid h-10 w-10 place-items-center rounded-lg border border-white/15 bg-white/5 text-white transition hover:bg-white/10";
 
   return (
     <nav className="sticky top-0 z-50 border-b border-orange-500/20 bg-black/40 backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
@@ -72,6 +84,15 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={`Alternar para ${nextThemeLabel}`}
+            className={themeButtonClasses}
+          >
+            {isLight ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            <span>{nextThemeLabel}</span>
+          </button>
           {usuario ? (
             <>
               <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-200">
@@ -109,13 +130,23 @@ export default function Navbar() {
           )}
         </div>
 
-        <button
-          onClick={() => setOpen((prev) => !prev)}
-          className="md:hidden grid h-10 w-10 place-items-center rounded-lg bg-white/10 text-white"
-          aria-label="Alternar menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={`Alternar para ${nextThemeLabel}`}
+            className={themeButtonIconClasses}
+          >
+            {isLight ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          </button>
+          <button
+            onClick={() => setOpen((prev) => !prev)}
+            className="grid h-10 w-10 place-items-center rounded-lg bg-white/10 text-white"
+            aria-label="Alternar menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -134,6 +165,15 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={`Alternar para ${nextThemeLabel}`}
+              className={themeButtonMobileClasses}
+            >
+              {isLight ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              <span>{nextThemeLabel}</span>
+            </button>
 
             <div className="border-t border-white/10 pt-3">
               {usuario ? (
