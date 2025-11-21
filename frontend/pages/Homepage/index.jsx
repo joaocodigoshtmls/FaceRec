@@ -26,7 +26,7 @@ export default function Homepage() {
             <Sparkles className="h-3.5 w-3.5" /> Reconhecimento Facial de Nova Geração
           </p>
           <h1 className="heading-gradient mb-4 text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-            Videoconferências inteligentes com <span className="text-[#ff7a1a]">Reconhecimento Facial</span>
+            Videoconferências inteligentes com <span className="text-[#00D9FF]">Reconhecimento Facial</span>
           </h1>
           <p className="mb-8 max-w-xl text-slate-400">
             Chamada automática com presença verificada em segundos — registros seguros e uma experiência simples para professores e alunos.
@@ -34,7 +34,7 @@ export default function Homepage() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/cadastro"
-              className="rounded-xl bg-gradient-to-b from-[#ff8a3d] to-[#ff5c00] px-5 py-3 font-medium text-white shadow-[0_8px_20px_rgba(255,100,30,0.35)] hover:brightness-110"
+              className="rounded-xl bg-gradient-to-b from-[#00D9FF] to-[#0288D1] px-5 py-3 font-medium text-[#0A1929] shadow-[0_8px_20px_rgba(2,136,209,0.45)] hover:brightness-110"
             >
               Cadastrar
             </Link>

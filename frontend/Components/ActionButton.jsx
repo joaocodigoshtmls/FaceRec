@@ -29,7 +29,7 @@ export default function ActionButton({
   };
 
   const variantClasses = {
-    solid: 'bg-gradient-to-b from-[#ff8a3d] to-[#ff5c00] text-white shadow-[0_8px_20px_rgba(255,100,30,0.35)] hover:brightness-110',
+    solid: 'bg-gradient-to-b from-[#00D9FF] to-[#0288D1] text-[#0A1929] shadow-[0_8px_20px_rgba(2,136,209,0.45)] hover:brightness-110',
     ghost: 'border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10',
     outlined: 'border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10',
     danger: 'border border-rose-500/40 bg-rose-500/10 text-rose-200 hover:bg-rose-500/20',
