@@ -25,7 +25,7 @@ export default function LoginFrame({ title = "Acesso FaceRec", subtitle, childre
           </Link>
           <Link
             to="/"
-            className="rounded-xl bg-gradient-to-b from-[#ff8a3d] to-[#ff5c00] px-4 py-2 text-sm font-medium text-white shadow-[0_8px_20px_rgba(255,100,30,0.35)] hover:brightness-110"
+            className="rounded-xl bg-gradient-to-b from-[#00D9FF] to-[#0288D1] px-4 py-2 text-sm font-medium text-[#0A1929] shadow-[0_8px_20px_rgba(2,136,209,0.45)] hover:brightness-110"
           >
             Voltar
           </Link>

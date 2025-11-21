@@ -225,7 +225,7 @@ export default function PerfilPage() {
                   handleSaveField(field);
                 }
               }}
-              className="flex-1 rounded-lg border border-white/15 bg-black/30 px-3 py-1.5 text-sm text-white focus:border-orange-400 focus:outline-none"
+              className="flex-1 rounded-lg border border-white/15 bg-black/30 px-3 py-1.5 text-sm text-white focus:border-[#00D9FF] focus:outline-none"
             />
             <button
               type="button"
@@ -277,7 +277,7 @@ export default function PerfilPage() {
                     <MapPin className="h-3.5 w-3.5 text-sky-300" /> {profile.lotacao}
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                    <CalendarCheck2 className="h-3.5 w-3.5 text-orange-300" /> {profile.criadoEm}
+                    <CalendarCheck2 className="h-3.5 w-3.5 text-cyan-300" /> {profile.criadoEm}
                   </span>
                 </div>
               </div>
@@ -399,7 +399,7 @@ export default function PerfilPage() {
               <div className="mt-4 space-y-5">
                 {timeline.map((entry) => (
                   <div key={entry.title + entry.time} className="relative pl-6">
-                    <span className="absolute left-0 top-1.5 h-2.5 w-2.5 rounded-full bg-gradient-to-b from-orange-300 to-orange-500" />
+                    <span className="absolute left-0 top-1.5 h-2.5 w-2.5 rounded-full bg-gradient-to-b from-cyan-300 to-cyan-500" />
                     <p className="text-sm font-medium text-white">{entry.title}</p>
                     <p className="text-xs text-slate-400">{entry.detail}</p>
                     <p className="text-[11px] text-slate-500">{entry.time}</p>

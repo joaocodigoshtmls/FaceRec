@@ -58,7 +58,7 @@ export default function Navbar() {
     : "grid h-10 w-10 place-items-center rounded-lg border border-white/15 bg-white/5 text-white transition hover:bg-white/10";
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-orange-500/20 bg-black/40 backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
+    <nav className="sticky top-0 z-50 border-b border-[#00D9FF]/20 bg-black/40 backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="group inline-flex items-center gap-3" onClick={closeMenu}>
           <div className="grid h-9 w-9 place-items-center rounded-xl bg-white/5 ring-1 ring-white/10 overflow-hidden">
@@ -120,7 +120,7 @@ export default function Navbar() {
                 onClick={closeMenu}
                 className={
                   variant === "primary"
-                    ? "rounded-xl bg-gradient-to-b from-[#ff8a3d] to-[#ff5c00] px-5 py-2 font-medium text-white shadow-[0_8px_20px_rgba(255,100,30,0.35)] hover:brightness-110"
+                    ? "rounded-xl bg-gradient-to-b from-[#00D9FF] to-[#0288D1] px-5 py-2 font-medium text-[#0A1929] shadow-[0_8px_20px_rgba(2,136,209,0.45)] hover:brightness-110"
                     : "rounded-xl px-4 py-2 text-slate-200 hover:text-white"
                 }
               >
@@ -203,7 +203,7 @@ export default function Navbar() {
                     onClick={closeMenu}
                     className={`inline-flex w-full justify-center rounded-xl px-4 py-2 text-sm font-medium transition ${
                       variant === "primary"
-                        ? "bg-gradient-to-b from-[#ff8a3d] to-[#ff5c00] text-white shadow-[0_8px_20px_rgba(255,100,30,0.35)] hover:brightness-110"
+                        ? "bg-gradient-to-b from-[#00D9FF] to-[#0288D1] text-[#0A1929] shadow-[0_8px_20px_rgba(2,136,209,0.45)] hover:brightness-110"
                         : "border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10"
                     }`}
                   >
