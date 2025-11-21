@@ -46,7 +46,7 @@ export default function FormField({
         onKeyDown={onKeyDown}
         autoFocus={autoFocus}
         required={required}
-        className="rounded-lg border border-white/15 bg-black/30 px-3 py-2 text-sm text-white focus:border-orange-400 focus:outline-none"
+        className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 focus:border-orange-400 focus:outline-none transition"
       />
       {error && <p className="text-xs text-rose-400">{error}</p>}
     </div>
