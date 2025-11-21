@@ -181,7 +181,8 @@ VITE_CAM_STREAM_URL=http://localhost:8080/stream
 - [x] Dependencies installed successfully
 - [x] Build process completes without errors
 - [x] Configuration files are valid
-- [ ] Environment variables documented
+- [x] Environment variables documented
+- [ ] Environment variables configured on cloud platforms
 - [ ] Database migrations ready
 - [ ] CORS whitelist configured for production domains
 
@@ -224,7 +225,7 @@ The API has CORS configured for:
 
 1. **Primary Platform:** Use Vercel for both frontend and API (simplest setup)
 2. **Alternative:** Use Railway for backend + Netlify for frontend (separated concerns)
-3. **Database:** AlwaysData MySQL or any cloud MySQL provider
+3. **Database:** Any cloud MySQL provider (e.g., PlanetScale, Railway MySQL, AWS RDS, AlwaysData)
 4. **Monitoring:** Enable Vercel/Railway logging for production debugging
 5. **Security:** Always use encrypted environment variables for sensitive data
 
@@ -235,7 +236,7 @@ The API has CORS configured for:
 | Frontend | Vercel/Netlify | ✅ Ready | Build successful |
 | API | Vercel Serverless | ✅ Ready | Register endpoint configured |
 | Backend | Railway | ✅ Ready | Express + Prisma |
-| Database | AlwaysData MySQL | ⚠️ Pending | Requires setup |
+| Database | Cloud MySQL | ⚠️ Pending | Requires setup with any provider |
 | Build Process | Local | ✅ Working | No errors |
 | Linting | Local | ⚠️ Has issues | Pre-existing |
 
