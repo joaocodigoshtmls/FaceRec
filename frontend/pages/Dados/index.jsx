@@ -15,21 +15,11 @@ const sampleCsvHref = new URL("../../../resources/tests/test-csv.csv", import.me
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-const statusStyles = {
-  ok: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
-  warn: "border-amber-500/40 bg-amber-500/10 text-amber-300",
-  error: "border-rose-500/40 bg-rose-500/10 text-rose-300",
-  loading: "border-sky-400/40 bg-sky-400/10 text-sky-200",
-  info: "border-white/10 bg-white/5 text-slate-300",
-};
-
 export default function DadosPage() {
   useDynamicTitle({
     title: "Dados · FaceRec",
     description: "Importe alunos e salas a partir de um CSV.",
   });
-
-  const navigate = useNavigate();
   const { usuario, isSupervisor, isProfessor } = useUser();
   const { importCSV, importRecords, salas, alunos, lastImport } = useData();
 

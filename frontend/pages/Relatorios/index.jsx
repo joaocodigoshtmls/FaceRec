@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import useDynamicTitle from "@/lib/useDynamicTitle";
 import { useData } from "@/contexts/DataContext";
 import { ArrowLeft, BarChart3, CheckCircle2, Download, Filter, PercentCircle, Search, User2, Users } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import PageShell from "@/Components/PageShell";
 import GlassSection from "@/Components/GlassSection";
 import PageHeader from "@/Components/PageHeader";
@@ -24,7 +23,6 @@ export default function RelatoriosPage() {
     description: "Médias de presença por sala e aluno, calculadas em tempo real.",
   });
 
-  const navigate = useNavigate();
   const { salas, alunos } = useData();
   const [selectedSalaId, setSelectedSalaId] = useState(() => (salas[0]?.id ? normalizeId(salas[0].id) : null));
   const [selectedAlunoId, setSelectedAlunoId] = useState(null);
