@@ -3,6 +3,10 @@ import useDynamicTitle from "@/lib/useDynamicTitle";
 import { useData } from "@/contexts/DataContext";
 import { ArrowLeft, BarChart3, CheckCircle2, Download, Filter, PercentCircle, Search, User2, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import PageShell from "@/Components/PageShell";
+import GlassSection from "@/Components/GlassSection";
+import PageHeader from "@/Components/PageHeader";
+import ActionButton from "@/Components/ActionButton";
 
 function normalizeId(v) {
   if (v === undefined || v === null) return null;
@@ -61,31 +65,29 @@ export default function RelatoriosPage() {
   const resumoHeader = selectedAlunoId ? `Aluno: ${alunoSelecionado?.nome || "—"}` : selectedSala ? `Sala: ${selectedSala.nome}` : "Relatórios";
 
   return (
-    <div className="login-scope min-h-[70vh] text-slate-200">
-      <section className="glass mx-auto max-w-6xl rounded-2xl p-6 md:p-8">
-        <header className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="heading-gradient text-2xl font-semibold md:text-3xl">Relatórios</h1>
-            <p className="mt-1 text-sm text-slate-400">Médias calculadas em tempo real por sala e por aluno.</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2 text-sm">
-            <button onClick={() => navigate(-1)} className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-200 transition hover:bg-white/10">
-              <ArrowLeft className="h-4 w-4" /> Voltar
-            </button>
-            <button className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-200 transition hover:bg-white/10">
-              <Download className="h-4 w-4" /> Exportar CSV (mock)
-            </button>
-            {selectedAlunoId && (
-              <button
-                onClick={() => setSelectedAlunoId(null)}
-                className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/10 px-4 py-2 text-emerald-200 transition hover:bg-emerald-500/20"
-                title="Voltar para a média da sala"
-              >
-                <BarChart3 className="h-4 w-4" /> Ver sala inteira
-              </button>
-            )}
-          </div>
-        </header>
+    <PageShell>
+      <GlassSection>
+        <PageHeader
+          title="Relatórios"
+          description="Médias calculadas em tempo real por sala e por aluno."
+          showBackButton
+          actions={
+            <>
+              <ActionButton variant="outlined" icon={Download}>
+                Exportar CSV (mock)
+              </ActionButton>
+              {selectedAlunoId && (
+                <ActionButton
+                  variant="success"
+                  icon={BarChart3}
+                  onClick={() => setSelectedAlunoId(null)}
+                >
+                  Ver sala inteira
+                </ActionButton>
+              )}
+            </>
+          }
+        />
 
         {/* Filtros */}
         <div className="mb-6 grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -219,7 +221,7 @@ export default function RelatoriosPage() {
             </table>
           </div>
         </div>
-      </section>
-    </div>
+      </GlassSection>
+    </PageShell>
   );
 }
